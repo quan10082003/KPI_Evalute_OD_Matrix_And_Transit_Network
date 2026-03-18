@@ -1,7 +1,9 @@
 from enum import Enum
 from typing import List, Set
 from dataclasses import dataclass
-import numpy as np
+import geopy
+import geopy.distance
+import shapely.geometry
 
 @dataclass
 class Direction(Enum):
@@ -12,12 +14,25 @@ class Direction(Enum):
 class Point:
     lat: float # Vi do
     lon: float # Kinh do
+    
     @property
+    def as_geopy(self):
+        return geopy.Point(self.lat, self.lon)
+        
+    @property
+    def as_shapely(self):
+        return shapely.geometry.Point(self.lon, self.lat)
+        
     def distance_to(self, other: 'Point') -> float:
-        return np.sqrt((self.lat - other.lat)**2 + (self.lon - other.lon)**2)
-    @property
+        # Tính khoảng cách theo đại hình học cầu (meters)
+        return geopy.distance.geodesic(self.as_geopy, other.as_geopy).meters
+        
     def distance_to_straight_line(self, line_start_point: 'Point', line_end_point: 'Point') -> float:
-        return np.sqrt((self.lat - line_start_point.lat)**2 + (self.lon - line_start_point.lon)**2)
+        # Sử dụng đối tượng đường thẳng của Shapely
+        line = shapely.geometry.LineString([line_start_point.as_shapely, line_end_point.as_shapely])
+        # Khoảng cách ở đây là theo hệ tọa độ độ (degrees). 
+        # Để chính xác ra mét, sau này có thể chiếu sang hệ UTM (CRS EPSG:32648 cho VN).
+        return self.as_shapely.distance(line)
 
 
 @dataclass
@@ -70,4 +85,3 @@ class AggregatedItinerary:
         if not self.legs: return set()
         # Chỉ lấy các bến xuống xe của chặng CUỐI CÙNG
         return self.legs[-1].possible_alight_stop_ids
-
