@@ -72,7 +72,7 @@ class Route:
             return 1.0 # Tránh lỗi chia cho 0
         return route_dist / straight_dist
     
-    def get_share_stops_with_other_route(self, other_route: Route) -> List[Stop]:
+    def get_share_stops_with_other_route(self, other_route: 'Route') -> List[Stop]:
         my_stop_ids = {stop.id for stop in self.stops_seq}
         other_stop_ids = {stop.id for stop in other_route.stops_seq}
         
