@@ -2,8 +2,6 @@
 REVIEW.md
 PLAN.md
 NOTE.md
-<<<<<<< HEAD
-=======
 __init__.py
->>>>>>> merge_1
 __pycache__
+.pytest_cache
