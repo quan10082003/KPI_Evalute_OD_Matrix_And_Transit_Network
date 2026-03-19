@@ -85,3 +85,28 @@ class AggregatedItinerary:
         if not self.legs: return set()
         # Chỉ lấy các bến xuống xe của chặng CUỐI CÙNG
         return self.legs[-1].possible_alight_stop_ids
+
+
+@dataclass
+class ODRoutingResult:
+    """
+    Kết quả của bước Tiền xử lý (Preprocessing) cho 1 cặp OD.
+    Đây là đầu ra của Routing Engine và là đầu vào cho KPI Service.
+    """
+    od_id: str
+    origin_zone_id: str
+    destination_zone_id: str
+    travel_demand: int
+    itineraries: List[Itinerary]  # Danh sách các hành trình khả thi tìm được
+
+    @property
+    def is_connected(self) -> bool:
+        """True nếu tìm được ít nhất 1 hành trình kết nối OD."""
+        return len(self.itineraries) > 0
+
+    @property
+    def best_itinerary(self) -> 'Itinerary | None':
+        """Trả về hành trình tốt nhất (ưu tiên ít transfer nhất)."""
+        if not self.itineraries:
+            return None
+        return min(self.itineraries, key=lambda it: it.total_transfers)
