@@ -4,7 +4,11 @@ from typing import List
 from application.base_repository import EvaluationDataRepository
 from domain.entities_and_dataclass.domain_dataclass import ODRoutingResult
 from domain.domain_service.routing_service.routing_service import find_routes
-from domain.domain_service.kpi_service.kpi_service import KPIService
+
+# Import từng KPI Domain Service tại đây khi chúng được triển khai.
+# Ví dụ:
+#   from domain.domain_service.kpi_service.kpi_A_service import KPIAService
+#   from domain.domain_service.kpi_service.kpi_B_service import KPIBService
 
 
 class KPIEvaluationApplication:
@@ -14,13 +18,15 @@ class KPIEvaluationApplication:
     Luồng thực thi gồm 4 bước:
       1. Load data          : Tải mạng lưới & nhu cầu từ Repository.
       2. Preprocessing      : Routing – tìm hành trình khả thi cho từng OD pair.
-      3. KPI Calculation    : Gọi các Domain KPI Service, tổng hợp kết quả thành dict.
+      3. KPI Calculation    : Gọi từng Domain KPI Service, ghép kết quả thành dict.
       4. Export             : Xuất kết quả ra file JSON (Phase 2: trả response API).
+
+    Việc gộp kết quả từ các KPI service thuộc trách nhiệm của Application layer
+    (orchestration), không phải Domain layer (nghiệp vụ thuần túy).
     """
 
     def __init__(self, repository: EvaluationDataRepository):
         self.repository = repository
-        self.kpi_service = KPIService()
 
     # ------------------------------------------------------------------
     # Public API
@@ -36,7 +42,9 @@ class KPIEvaluationApplication:
         od_routing_results = self._preprocess(od_pairs, routes)
 
         # ── Bước 3: KPI Calculation ────────────────────────────────────
-        kpi_report: dict = self.kpi_service.calculate_network_kpis(
+        # Application gọi từng KPI Domain Service rồi ghép kết quả.
+        # Mỗi service trả về 1 dict ứng với nhóm KPI của nó.
+        kpi_report = self._calculate_kpis(
             od_routing_results=od_routing_results,
             stops=stops,
             routes=routes,
@@ -44,7 +52,7 @@ class KPIEvaluationApplication:
 
         # ── Bước 4: Export ─────────────────────────────────────────────
         # Phase 1: xuất ra file JSON.
-        # Phase 2 (tương lai): trả kpi_report về dưới dạng response cho API caller.
+        # Phase 2 (tương lai): trả kpi_report dưới dạng response cho API caller.
         self._export_json(
             kpi_report=kpi_report,
             output_json_path=output_json_path,
@@ -59,19 +67,18 @@ class KPIEvaluationApplication:
         print("=== HOÀN TẤT ĐÁNH GIÁ ===")
 
     # ------------------------------------------------------------------
-    # Private helpers
+    # Private: Bước 2 – Preprocessing
     # ------------------------------------------------------------------
 
     def _preprocess(self, od_pairs, routes) -> List[ODRoutingResult]:
         """
-        Bước Tiền xử lý: chạy Routing Engine cho từng OD pair.
+        Chạy Routing Engine cho từng OD pair.
         Trả về danh sách ODRoutingResult chứa các hành trình khả thi.
         """
         results = []
         print(f"[Preprocessing] Bắt đầu Routing cho {len(od_pairs)} OD Pairs...")
 
         for index, od in enumerate(od_pairs):
-            # Bỏ qua các cặp OD cùng vùng (chưa hỗ trợ)
             if od.origin_area.id == od.destination_area.id:
                 continue
 
@@ -92,11 +99,69 @@ class KPIEvaluationApplication:
         print(f"[Preprocessing] Hoàn tất: {connected}/{len(results)} OD Pairs có hành trình kết nối.")
         return results
 
+    # ------------------------------------------------------------------
+    # Private: Bước 3 – KPI Calculation (Orchestration)
+    # ------------------------------------------------------------------
+
+    def _calculate_kpis(self, od_routing_results, stops, routes) -> dict:
+        """
+        Application tự ghép kết quả từ các Domain KPI Service thành 1 dict.
+
+        Mỗi KPI Service con trả về 1 dict ứng với nhóm KPI của nó.
+        Application là nơi duy nhất biết cần gọi những service nào và ghép ra sao.
+
+        Hướng mở rộng (Phase 2) – chỉ cần thêm dòng gọi service mới:
+            kpi_report["kpi_A"] = KPIAService().calculate(od_routing_results, routes)
+            kpi_report["kpi_B"] = KPIBService().calculate(od_routing_results, stops, routes)
+        """
+        kpi_report = {}
+
+        # ── Placeholder: Connectivity cơ bản (Phase 1 POC) ────────────
+        total = len(od_routing_results)
+        connected = sum(1 for r in od_routing_results if r.is_connected)
+        direct_only = sum(
+            1 for r in od_routing_results
+            if r.is_connected and r.best_itinerary and r.best_itinerary.total_transfers == 0
+        )
+        one_transfer = sum(
+            1 for r in od_routing_results
+            if r.is_connected and r.best_itinerary and r.best_itinerary.total_transfers == 1
+        )
+
+        kpi_report["connectivity"] = {
+            "total_od_pairs": total,
+            "connected_od_pairs": connected,
+            "unconnected_od_pairs": total - connected,
+            "connectivity_rate": round(connected / total, 4) if total > 0 else 0.0,
+            "direct_connection_count": direct_only,
+            "one_transfer_count": one_transfer,
+        }
+
+        # ── Chi tiết từng OD (để debug / export) ──────────────────────
+        od_details = []
+        for result in od_routing_results:
+            best = result.best_itinerary
+            od_details.append({
+                "od_id": result.od_id,
+                "origin_zone": result.origin_zone_id,
+                "dest_zone": result.destination_zone_id,
+                "demand": result.travel_demand,
+                "feasible_itineraries_count": len(result.itineraries),
+                "best_transfers": best.total_transfers if best else -1,
+                "is_connected": result.is_connected,
+            })
+        kpi_report["detailed_od_evaluations"] = od_details
+
+        return kpi_report
+
+    # ------------------------------------------------------------------
+    # Private: Bước 4 – Export
+    # ------------------------------------------------------------------
+
     def _export_json(self, kpi_report: dict, output_json_path: str, meta: dict):
         """
-        Bước Export: ghi kết quả KPI ra file JSON.
-        Phase 2 (tương lai): hàm này sẽ được thay thế / bổ sung bằng
-        endpoint trả về kpi_report dưới dạng JSON response cho frontend.
+        Phase 1: ghi kết quả KPI ra file JSON.
+        Phase 2 (tương lai): trả kpi_report về dưới dạng JSON response cho frontend.
         """
         print(f"[Export] Đang lưu kết quả vào {output_json_path}...")
         report = {
