@@ -1,0 +1,35 @@
+=== KPI Calculation Results for OD: OD_TEST_MULTIPLE ===
+
+--- Tranfer_rate_caculate ---
+{'agg_itinerary_0': {'score': '0'}}
+
+--- Cricuity_index_caculate ---
+{'itinerary_0': {'score': 1.4142048725871572, 'route_sequence': ['R1'], 'stop_sequence': ['S1', 'S2']}}
+
+=== Raw JSON ===
+{
+    "od_id": "OD_TEST_MULTIPLE",
+    "kpi_results": {
+        "Tranfer_rate_caculate": [
+            {
+                "agg_itinerary_0": {
+                    "score": "0"
+                }
+            }
+        ],
+        "Cricuity_index_caculate": [
+            {
+                "itinerary_0": {
+                    "score": 1.4142048725871572,
+                    "route_sequence": [
+                        "R1"
+                    ],
+                    "stop_sequence": [
+                        "S1",
+                        "S2"
+                    ]
+                }
+            }
+        ]
+    }
+}

@@ -1,0 +1,25 @@
+=== KPI Calculation Results for OD: OD_TEST_CIRCUITY ===
+
+--- Cricuity_index_caculate ---
+{'itinerary_0': {'score': 1.4142048725871572, 'route_sequence': ['R1'], 'stop_sequence': ['S1', 'S2']}}
+
+=== Raw JSON ===
+{
+    "od_id": "OD_TEST_CIRCUITY",
+    "kpi_results": {
+        "Cricuity_index_caculate": [
+            {
+                "itinerary_0": {
+                    "score": 1.4142048725871572,
+                    "route_sequence": [
+                        "R1"
+                    ],
+                    "stop_sequence": [
+                        "S1",
+                        "S2"
+                    ]
+                }
+            }
+        ]
+    }
+}
