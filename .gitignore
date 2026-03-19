@@ -2,3 +2,5 @@
 REVIEW.md
 PLAN.md
 NOTE.md
+__init__.py
+__pycache__

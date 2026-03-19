@@ -50,12 +50,12 @@ class Itinerary:
     def total_transfers(self) -> int:
         return len(self.legs) - 1
     @property
-    def set_origin_stops_id(self) -> Set[str]:
+    def get_origin_stops_id(self) -> Set[str]:
         if not self.legs: return set()
         # Chỉ lấy các bến lên xe của chặng ĐẦU TIÊN
         return self.legs[0].board_stop_id    
     @property
-    def set_destination_stops_id(self) -> Set[str]:
+    def get_destination_stops_id(self) -> Set[str]:
         if not self.legs: return set()
         # Chỉ lấy các bến xuống xe của chặng CUỐI CÙNG
         return self.legs[-1].alight_stop_id
@@ -76,12 +76,12 @@ class AggregatedItinerary:
     def total_transfers(self) -> int:
         return len(self.legs) - 1
     @property
-    def set_origin_stops_id(self) -> Set[str]:
+    def get_origin_stops_id(self) -> Set[str]:
         if not self.legs: return set()
         # Chỉ lấy các bến lên xe của chặng ĐẦU TIÊN
         return self.legs[0].possible_board_stop_ids    
     @property
-    def set_destination_stops_id(self) -> Set[str]:
+    def get_destination_stops_id(self) -> Set[str]:
         if not self.legs: return set()
         # Chỉ lấy các bến xuống xe của chặng CUỐI CÙNG
         return self.legs[-1].possible_alight_stop_ids
