@@ -32,11 +32,13 @@ class EvaluateNetworkUseCase:
         od_routing_results = self._preprocess(od_pairs, routes)
 
         # 3. KPI Aggregation
-        kpi_report = self.kpi_aggregator.aggregate_results(
-            od_routing_results=od_routing_results,
-            stops=stops,
-            routes=routes,
-        )
+
+        
+        # kpi_report = self.kpi_aggregator.aggregate_results(
+        #     od_routing_results=od_routing_results,
+        #     stops=stops,
+        #     routes=routes,
+        # )
 
         # 4. Export
         meta = {
