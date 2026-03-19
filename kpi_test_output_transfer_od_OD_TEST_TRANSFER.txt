@@ -1,0 +1,18 @@
+=== KPI Calculation Results for OD: OD_TEST_TRANSFER ===
+
+--- Tranfer_rate_caculate ---
+{'agg_itinerary_0': {'score': '0'}}
+
+=== Raw JSON ===
+{
+    "od_id": "OD_TEST_TRANSFER",
+    "kpi_results": {
+        "Tranfer_rate_caculate": [
+            {
+                "agg_itinerary_0": {
+                    "score": "0"
+                }
+            }
+        ]
+    }
+}
