@@ -50,15 +50,25 @@ class Itinerary:
     def total_transfers(self) -> int:
         return len(self.legs) - 1
     @property
-    def get_origin_stops_id(self) -> Set[str]:
+    def get_origin_stops_id(self) -> str:
         if not self.legs: return set()
         # Chỉ lấy các bến lên xe của chặng ĐẦU TIÊN
         return self.legs[0].board_stop_id    
     @property
-    def get_destination_stops_id(self) -> Set[str]:
+    def get_destination_stops_id(self) -> str:
         if not self.legs: return set()
         # Chỉ lấy các bến xuống xe của chặng CUỐI CÙNG
         return self.legs[-1].alight_stop_id
+
+    @property
+    def get_list_stops_id(self) -> List[str]:
+        if not self.legs: return []
+        return [leg.board_stop_id for leg in self.legs] + [self.legs[-1].alight_stop_id]
+
+    @property
+    def get_list_routes_id(self) -> List[str]:
+        if not self.legs: return []
+        return [leg.route_ref_id for leg in self.legs]
 
 
 @dataclass(frozen=True)
@@ -85,3 +95,23 @@ class AggregatedItinerary:
         if not self.legs: return set()
         # Chỉ lấy các bến xuống xe của chặng CUỐI CÙNG
         return self.legs[-1].possible_alight_stop_ids
+
+
+@dataclass
+class ODRoutingResult:
+    od_id: str
+    aggregated_itineraries: List[AggregatedItinerary]
+    represent_itineraries: List[Itinerary]
+    
+    @property
+    def total_aggregated_itineraries(self) -> int:
+        return len(self.aggregated_itineraries)
+
+    @property
+    def total_direct_itineraries(self) -> int:
+        return len([agg for agg in self.aggregated_itineraries if agg.total_transfers == 0])
+    
+    @property
+    def total_one_transfer_itineraries(self) -> int:
+        return len([agg for agg in self.aggregated_itineraries if agg.total_transfers == 1])
+    

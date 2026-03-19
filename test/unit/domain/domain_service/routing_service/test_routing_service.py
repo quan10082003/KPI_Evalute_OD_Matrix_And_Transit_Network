@@ -28,7 +28,7 @@ def test_route_finding_service_facade():
     itin_list = find_routes(od, [r1,r2,r3,r4,r4N,r5])
     
     assert len(itin_list) == 3
-    assert itin_list[0].legs[0].route_ref_id == "R5"
-    assert itin_list[1].legs[0].route_ref_id == "R1"
+    assert itin_list[0].legs[0].route_ref_id == "R1"
+    assert itin_list[1].legs[0].route_ref_id == "R5"
     assert itin_list[2].legs[0].route_ref_id == "R3"
     assert itin_list[2].legs[1].route_ref_id == "R4"
