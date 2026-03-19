@@ -1,9 +1,9 @@
 import pytest
-import os
 import json
 from domain.entities_and_dataclass.domain_dataclass import ODRoutingResult, AggregatedItinerary, AggregatedLeg, Itinerary, Leg, Point
-from domain.entities_and_dataclass.domain_class import Stop, Route, Direction
+from domain.entities_and_dataclass.domain_class import Stop, Route, Direction, Zone
 from domain.domain_service.kpi_service.kpi_service import Cricuity_index_caculate, KPI_caculate, Tranfer_rate_caculate
+from domain.domain_service.kpi_service.kpi_A_service import KPIASpatialCoverageService
 from application.services.odresult_cal_kpi import CalKPI
 
 def save_result_to_txt(od_id: str, results: dict, test_name: str):
@@ -107,3 +107,45 @@ def test_cal_multiple_kpis():
     
     # Lưu kết quả ra file Txt để Test
     save_result_to_txt(od_result.od_id, result, "multiple")
+
+def test_cal_kpi_with_spatial_coverage():
+    # Arrange
+    s1 = Stop("S1", 0.0, 0.0)
+    s2 = Stop("S2", 0.1, 0.1)
+    
+    z1 = Zone("Z1", [Point(0.0, 0.0), Point(0.1, 0.0), Point(0.0, 0.1)], Point(0.05, 0.05))
+    z2 = Zone("Z2", [Point(0.1, 0.1), Point(0.2, 0.1), Point(0.1, 0.2)], Point(0.15, 0.15))
+    
+    leg1 = AggregatedLeg("R1", {"S1"}, {"S2"})
+    agg_iti = AggregatedItinerary([leg1])
+    
+    od_result = ODRoutingResult(
+        od_id="OD_TEST_SPATIAL", 
+        aggregated_itineraries=[agg_iti], 
+        represent_itineraries=[]
+    )
+    
+    # Mocking properties dually needed by odresult_cal_kpi.py currently if they were lost 
+    od_result.origin_zone_id = "Z1"
+    od_result.destination_zone_id = "Z2"
+    
+    # Truyền instance KPIASpatialCoverageService với dữ liệu zone/stop thực
+    calculators: list[KPI_caculate] = [KPIASpatialCoverageService(zones=[z1, z2], stops=[s1, s2], stop_coverage_radius_m=500.0)]
+    cal_kpi_service = CalKPI()
+    
+    # Act
+    result = cal_kpi_service.cal_kpi(
+        od_result, 
+        calculators
+    )
+    
+    # Assert
+    assert "KPIASpatialCoverageService" in result["kpi_results"]
+    assert len(result["kpi_results"]["KPIASpatialCoverageService"]) == 1
+    
+    kpi_res_dict = result["kpi_results"]["KPIASpatialCoverageService"][0]
+    assert f"od_id_{od_result.od_id}" in kpi_res_dict
+    
+    # Lưu kết quả ra file Txt để Test
+    save_result_to_txt(od_result.od_id, result, "spatial")
+

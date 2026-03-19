@@ -1,10 +1,10 @@
 import json
-from typing import List
 
 from application.ports.base_repository import EvaluationDataRepository
-from application.services.kpi_aggregator_service import KPIAggregatorService
-from domain.entities_and_dataclass.domain_dataclass import ODRoutingResult
-from domain.domain_service.routing_service.routing_service import find_routes
+from application.services.odresult_cal_kpi import CalKPI
+from application.services.produce_odresult import ProduceODResult
+from domain.domain_service.kpi_service.kpi_A_service import KPIASpatialCoverageService
+from domain.domain_service.kpi_service.kpi_service import Cricuity_index_caculate, Tranfer_rate_caculate
 
 
 class EvaluateNetworkUseCase:
@@ -20,7 +20,8 @@ class EvaluateNetworkUseCase:
 
     def __init__(self, repository: EvaluationDataRepository):
         self.repository = repository
-        self.kpi_aggregator = KPIAggregatorService()
+        self.od_result_producer = ProduceODResult()
+        self.kpi_calculator = CalKPI()
 
     def execute(self, output_json_path: str):
         print("=== BẮT ĐẦU ĐÁNH GIÁ MẠNG LƯỚI XE BUÝT ===")
@@ -29,16 +30,44 @@ class EvaluateNetworkUseCase:
         stops, routes, zones, od_pairs = self.repository.load_network_and_demand()
 
         # 2. Preprocessing (Routing)
-        od_routing_results = self._preprocess(od_pairs, routes)
+        print(f"[Preprocessing] Bắt đầu Routing cho {len(od_pairs)} OD Pairs...")
+        valid_od_pairs = [od for od in od_pairs if od.origin_area.id != od.destination_area.id]
+        od_routing_results = self.od_result_producer.produce_od_result(
+            route_list=routes,
+            stop_list=stops,
+            zone_list=zones,
+            od_pair_list=valid_od_pairs,
+        )
 
-        # 3. KPI Aggregation
+        od_pair_map = {od.id: od for od in valid_od_pairs}
+        for result in od_routing_results:
+            od = od_pair_map.get(result.od_id)
+            if od is None:
+                continue
+            result.origin_zone_id = od.origin_area.id
+            result.destination_zone_id = od.destination_area.id
+            result.travel_demand = od.travel_demand
 
-        
-        # kpi_report = self.kpi_aggregator.aggregate_results(
-        #     od_routing_results=od_routing_results,
-        #     stops=stops,
-        #     routes=routes,
-        # )
+        connected = sum(1 for r in od_routing_results if len(r.aggregated_itineraries) > 0)
+        print(f"[Preprocessing] Hoàn tất: {connected}/{len(od_routing_results)} OD Pairs có hành trình kết nối.")
+
+        # 3. KPI Calculate
+        kpi_calculators = [
+            Tranfer_rate_caculate(),
+            Cricuity_index_caculate(),
+            KPIASpatialCoverageService(zones=zones, stops=stops, stop_coverage_radius_m=500.0),
+        ]
+
+        od_kpi_results = []
+        for od_result in od_routing_results:
+            kpi_result = self.kpi_calculator.cal_kpi(
+                od_routing_results=od_result,
+                kpi_calculators=kpi_calculators,
+                route_list=routes,
+            )
+            od_kpi_results.append(kpi_result)
+
+        kpi_report = {"od_kpi_results": od_kpi_results}
 
         # 4. Export
         meta = {
@@ -50,31 +79,6 @@ class EvaluateNetworkUseCase:
         self._export_json(kpi_report, output_json_path, meta)
 
         print("=== HOÀN TẤT ĐÁNH GIÁ ===")
-
-    def _preprocess(self, od_pairs, routes) -> List[ODRoutingResult]:
-        results = []
-        print(f"[Preprocessing] Bắt đầu Routing cho {len(od_pairs)} OD Pairs...")
-
-        for index, od in enumerate(od_pairs):
-            if od.origin_area.id == od.destination_area.id:
-                continue
-
-            itineraries = find_routes(od_pair=od, routes=routes)
-
-            results.append(ODRoutingResult(
-                od_id=od.id,
-                origin_zone_id=od.origin_area.id,
-                destination_zone_id=od.destination_area.id,
-                travel_demand=od.travel_demand,
-                itineraries=itineraries,
-            ))
-
-            if (index + 1) % 100 == 0:
-                print(f"[Preprocessing] Đã xử lý {index + 1}/{len(od_pairs)} OD Pairs...")
-
-        connected = sum(1 for r in results if r.is_connected)
-        print(f"[Preprocessing] Hoàn tất: {connected}/{len(results)} OD Pairs có hành trình kết nối.")
-        return results
 
     def _export_json(self, kpi_report: dict, output_json_path: str, meta: dict):
         print(f"[Export] Đang lưu kết quả vào {output_json_path}...")

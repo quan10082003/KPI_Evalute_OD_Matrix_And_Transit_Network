@@ -1,8 +1,16 @@
 import xml.etree.ElementTree as ET
-from typing import List, Tuple, Dict
+from typing import List, Tuple
 from application.ports.base_repository import EvaluationDataRepository
 from domain.entities_and_dataclass.domain_class import Stop, Route, Zone, ODPair
 from domain.entities_and_dataclass.domain_dataclass import Direction, Point
+from domain.domain_service.routing_service.core_engine import (
+    DirectConnectionRoutingEngine,
+    OneTransferRoutingEngine,
+)
+from domain.domain_service.routing_service.filter_strategy import (
+    OneTransferOptimalFilter,
+    OptimalWalkingDistanceFilter,
+)
 
 class CottbusXmlRepository(EvaluationDataRepository):
     """
@@ -11,18 +19,34 @@ class CottbusXmlRepository(EvaluationDataRepository):
     - x / 10000 -> lon
     - y / 100000 -> lat
     """
-    def __init__(self, schedule_path: str, plans_path: str, max_plans: int = 1000):
+    def __init__(
+        self,
+        schedule_path: str,
+        plans_path: str,
+        max_plans: int = 1000,
+        zone_half_size_deg: float = 0.01,
+    ):
         self.schedule_path = schedule_path
         self.plans_path = plans_path
         self.max_plans = max_plans
+        if zone_half_size_deg <= 0:
+            raise ValueError("zone_half_size_deg phải > 0")
+        self.zone_half_size_deg = zone_half_size_deg
+        # Reuse routing engines để pre-filter OD có kết nối ngay tại parsing.
+        self._direct_engine = DirectConnectionRoutingEngine(filter_strategy=OptimalWalkingDistanceFilter())
+        self._one_transfer_engine = OneTransferRoutingEngine(filter_strategy=OneTransferOptimalFilter())
 
     def load_network_and_demand(self) -> Tuple[List[Stop], List[Route], List[Zone], List[ODPair]]:
         print(f"[Repo] Bắt đầu đọc dữ liệu từ: {self.schedule_path} & {self.plans_path}")
         stops = self._parse_stops()
         routes = self._parse_routes(stops)
         zones, od_pairs = self._parse_zones_and_od_pairs()
-        print(f"[Repo] Đã tải xong: {len(stops)} Stops, {len(routes)} Routes, {len(zones)} Zones, {len(od_pairs)} OD Pairs.")
-        return stops, routes, zones, od_pairs
+        filtered_zones, filtered_od_pairs = self._filter_connected_od_pairs(zones, od_pairs, routes)
+        print(
+            f"[Repo] Đã tải xong: {len(stops)} Stops, {len(routes)} Routes, "
+            f"{len(filtered_zones)} Zones, {len(filtered_od_pairs)} OD Pairs (connected-only)."
+        )
+        return stops, routes, filtered_zones, filtered_od_pairs
         
     def _parse_stops(self) -> List[Stop]:
         tree = ET.parse(self.schedule_path)
@@ -93,10 +117,29 @@ class CottbusXmlRepository(EvaluationDataRepository):
             lon_o, lat_o = x_o / 10000.0, y_o / 100000.0
             lon_d, lat_d = x_d / 10000.0, y_d / 100000.0
             
-            # Create mock microscopic zones
-            zone_o = Zone(id=f"Z{zone_id_counter}", boundary=[Point(lat_o, lon_o), Point(lat_o+0.001, lon_o), Point(lat_o, lon_o+0.001)], centroid=Point(lat_o, lon_o))
+            # Nới zone thành hình vuông quanh centroid để tăng khả năng chạm stop thực tế.
+            half = self.zone_half_size_deg
+            zone_o = Zone(
+                id=f"Z{zone_id_counter}",
+                boundary=[
+                    Point(lat_o - half, lon_o - half),
+                    Point(lat_o - half, lon_o + half),
+                    Point(lat_o + half, lon_o + half),
+                    Point(lat_o + half, lon_o - half),
+                ],
+                centroid=Point(lat_o, lon_o),
+            )
             zone_id_counter += 1
-            zone_d = Zone(id=f"Z{zone_id_counter}", boundary=[Point(lat_d, lon_d), Point(lat_d+0.001, lon_d), Point(lat_d, lon_d+0.001)], centroid=Point(lat_d, lon_d))
+            zone_d = Zone(
+                id=f"Z{zone_id_counter}",
+                boundary=[
+                    Point(lat_d - half, lon_d - half),
+                    Point(lat_d - half, lon_d + half),
+                    Point(lat_d + half, lon_d + half),
+                    Point(lat_d + half, lon_d - half),
+                ],
+                centroid=Point(lat_d, lon_d),
+            )
             zone_id_counter += 1
             
             zones.extend([zone_o, zone_d])
@@ -105,3 +148,28 @@ class CottbusXmlRepository(EvaluationDataRepository):
             count += 1
 
         return zones, od_pairs
+
+    def _filter_connected_od_pairs(
+        self,
+        zones: List[Zone],
+        od_pairs: List[ODPair],
+        routes: List[Route],
+    ) -> Tuple[List[Zone], List[ODPair]]:
+        connected_od_pairs: List[ODPair] = []
+        connected_zone_map = {}
+
+        for od_pair in od_pairs:
+            if self._is_od_connected(od_pair, routes):
+                connected_od_pairs.append(od_pair)
+                connected_zone_map[od_pair.origin_area.id] = od_pair.origin_area
+                connected_zone_map[od_pair.destination_area.id] = od_pair.destination_area
+
+        return list(connected_zone_map.values()), connected_od_pairs
+
+    def _is_od_connected(self, od_pair: ODPair, routes: List[Route]) -> bool:
+        aggregated_0 = self._direct_engine._find_aggregated_itineraries(od_pair=od_pair, routes=routes)
+        if aggregated_0:
+            return True
+
+        aggregated_1 = self._one_transfer_engine._find_aggregated_itineraries(od_pair=od_pair, routes=routes)
+        return len(aggregated_1) > 0

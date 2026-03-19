@@ -1,9 +1,10 @@
-from typing import List, Dict, Any, Optional
-import json
+from typing import List, Any, Optional
 
 from domain.entities_and_dataclass.domain_dataclass import ODRoutingResult
 from domain.domain_service.kpi_service.kpi_service import KPI_caculate, Tranfer_rate_caculate, Cricuity_index_caculate
-from domain.entities_and_dataclass.domain_class import Route
+from domain.entities_and_dataclass.domain_class import Route, Stop, Zone, ODPair
+from domain.domain_service.kpi_service.kpi_A_service import KPIASpatialCoverageService
+
 
 class CalKPI:
     def __init__(self):
@@ -16,12 +17,6 @@ class CalKPI:
                 stop_list: Optional[List[Stop]] = None,
                 zone_list: Optional[List[Zone]] = None,
                 od_pair_list: Optional[List[ODPair]] = None) -> dict:
-        
-        # NOTE: Đoạn code cũ có gọi id_to_od() nhưng do chưa rõ được lấy từ đâu
-        # Tạm thời comment lại và thay thế bằng các input mới cho phù hợp nhu cầu tính các KPIs
-        # odpair = id_to_od(od_routing_results.od_id)
-        # o_bound = odpair.origin_zone_id.boundary
-        # d_bound = odpair.destination_zone_id.boundary
 
         if route_list is None:
             route_list = []
@@ -50,9 +45,41 @@ class CalKPI:
                     results["kpi_results"][kpi_name].append({
                         f"itinerary_{idx}": kpi_res
                     })
-            else:
-                # Nếu có thêm KPI mới, xử lý tương ứng ở đây hoặc theo template chung
-                pass
 
+            elif isinstance(kpi_cal, KPIASpatialCoverageService):
+                if not od_routing_results.aggregated_itineraries:
+                    kpi_res = self._empty_spatial_kpi(od_routing_results, kpi_cal.stop_coverage_radius_m)
+                else:
+                    if not hasattr(od_routing_results, "origin_zone_id") or not hasattr(od_routing_results, "destination_zone_id"):
+                        raise ValueError("ODRoutingResult thiếu origin_zone_id/destination_zone_id cho Spatial KPI")
+
+                    kpi_res = kpi_cal.compute(
+                        od_routing_results.origin_zone_id,
+                        od_routing_results.destination_zone_id,
+                        od_routing_results.aggregated_itineraries[0],
+                    )
+                results["kpi_results"][kpi_name].append({
+                    f"od_id_{od_routing_results.od_id}": kpi_res
+                })
+
+            else:
+                raise ValueError(f"Không tìm thấy KPI calculator: {kpi_name}")
 
         return results
+
+    def _empty_spatial_kpi(self, od_routing_results: ODRoutingResult, radius_m: float) -> dict:
+        origin_zone_id = getattr(od_routing_results, "origin_zone_id", "")
+        destination_zone_id = getattr(od_routing_results, "destination_zone_id", "")
+        return {
+            "score_percent": 0.0,
+            "score_ratio": 0.0,
+            "origin_coverage_percent": 0.0,
+            "origin_coverage_ratio": 0.0,
+            "destination_coverage_percent": 0.0,
+            "destination_coverage_ratio": 0.0,
+            "origin_zone_id": origin_zone_id,
+            "destination_zone_id": destination_zone_id,
+            "radius_m": radius_m,
+            "origin_stop_count": 0,
+            "destination_stop_count": 0,
+        }

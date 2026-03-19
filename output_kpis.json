@@ -1,0 +1,1519 @@
+{
+    "summary": {
+        "total_od_pairs_evaluated": 32,
+        "total_stops": 371,
+        "total_routes": 32,
+        "phase": "POC Phase 1"
+    },
+    "kpi_report": {
+        "od_kpi_results": [
+            {
+                "od_id": "OD_12052000_12052000_1004",
+                "kpi_results": {
+                    "Tranfer_rate_caculate": [
+                        {
+                            "agg_itinerary_0": {
+                                "score": "0"
+                            }
+                        }
+                    ],
+                    "Cricuity_index_caculate": [
+                        {
+                            "itinerary_0": {
+                                "score": 7.110391573740106,
+                                "route_sequence": [
+                                    "19_19_out"
+                                ],
+                                "stop_sequence": [
+                                    "9470305_a",
+                                    "9470155_a"
+                                ]
+                            }
+                        }
+                    ],
+                    "KPIASpatialCoverageService": [
+                        {
+                            "od_id_OD_12052000_12052000_1004": {
+                                "score_percent": 3.1043331265731196,
+                                "score_ratio": 0.031043331265731194,
+                                "origin_coverage_percent": 10.871117098919695,
+                                "origin_coverage_ratio": 0.10871117098919696,
+                                "destination_coverage_percent": 28.55578776611291,
+                                "destination_coverage_ratio": 0.2855578776611291,
+                                "origin_zone_id": "Z17",
+                                "destination_zone_id": "Z18",
+                                "radius_m": 500.0,
+                                "origin_stop_count": 1,
+                                "destination_stop_count": 1
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "od_id": "OD_12052000_12052000_101",
+                "kpi_results": {
+                    "Tranfer_rate_caculate": [
+                        {
+                            "agg_itinerary_0": {
+                                "score": "0"
+                            }
+                        }
+                    ],
+                    "Cricuity_index_caculate": [
+                        {
+                            "itinerary_0": {
+                                "score": 1.0593347546071246,
+                                "route_sequence": [
+                                    "13_13_in"
+                                ],
+                                "stop_sequence": [
+                                    "9445543_b",
+                                    "9470326_d"
+                                ]
+                            }
+                        }
+                    ],
+                    "KPIASpatialCoverageService": [
+                        {
+                            "od_id_OD_12052000_12052000_101": {
+                                "score_percent": 6.072362604418938,
+                                "score_ratio": 0.060723626044189384,
+                                "origin_coverage_percent": 20.687591609359753,
+                                "origin_coverage_ratio": 0.20687591609359754,
+                                "destination_coverage_percent": 29.352680191499914,
+                                "destination_coverage_ratio": 0.29352680191499914,
+                                "origin_zone_id": "Z29",
+                                "destination_zone_id": "Z30",
+                                "radius_m": 500.0,
+                                "origin_stop_count": 1,
+                                "destination_stop_count": 1
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "od_id": "OD_12052000_12052000_1018",
+                "kpi_results": {
+                    "Tranfer_rate_caculate": [
+                        {
+                            "agg_itinerary_0": {
+                                "score": "0"
+                            }
+                        }
+                    ],
+                    "Cricuity_index_caculate": [
+                        {
+                            "itinerary_0": {
+                                "score": 1.1461221261448478,
+                                "route_sequence": [
+                                    "19_19_in"
+                                ],
+                                "stop_sequence": [
+                                    "9470312_b",
+                                    "9470270_b"
+                                ]
+                            }
+                        }
+                    ],
+                    "KPIASpatialCoverageService": [
+                        {
+                            "od_id_OD_12052000_12052000_1018": {
+                                "score_percent": 5.781473329503206,
+                                "score_ratio": 0.05781473329503206,
+                                "origin_coverage_percent": 19.6738958960728,
+                                "origin_coverage_ratio": 0.19673895896072802,
+                                "destination_coverage_percent": 29.3865198842354,
+                                "destination_coverage_ratio": 0.293865198842354,
+                                "origin_zone_id": "Z47",
+                                "destination_zone_id": "Z48",
+                                "radius_m": 500.0,
+                                "origin_stop_count": 1,
+                                "destination_stop_count": 1
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "od_id": "OD_12052000_12052000_1019",
+                "kpi_results": {
+                    "Tranfer_rate_caculate": [
+                        {
+                            "agg_itinerary_0": {
+                                "score": "1"
+                            }
+                        }
+                    ],
+                    "Cricuity_index_caculate": [
+                        {
+                            "itinerary_0": {
+                                "score": 2.242649187416647,
+                                "route_sequence": [
+                                    "19_19_out",
+                                    "21_21_in"
+                                ],
+                                "stop_sequence": [
+                                    "9470247_a",
+                                    "9470234_a",
+                                    "9470098_b"
+                                ]
+                            }
+                        }
+                    ],
+                    "KPIASpatialCoverageService": [
+                        {
+                            "od_id_OD_12052000_12052000_1019": {
+                                "score_percent": 5.329484870518914,
+                                "score_ratio": 0.053294848705189135,
+                                "origin_coverage_percent": 41.249030800457646,
+                                "origin_coverage_ratio": 0.4124903080045765,
+                                "destination_coverage_percent": 12.9202668937855,
+                                "destination_coverage_ratio": 0.129202668937855,
+                                "origin_zone_id": "Z49",
+                                "destination_zone_id": "Z50",
+                                "radius_m": 500.0,
+                                "origin_stop_count": 2,
+                                "destination_stop_count": 1
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "od_id": "OD_12052000_12052000_1024",
+                "kpi_results": {
+                    "Tranfer_rate_caculate": [
+                        {
+                            "agg_itinerary_0": {
+                                "score": "1"
+                            }
+                        }
+                    ],
+                    "Cricuity_index_caculate": [
+                        {
+                            "itinerary_0": {
+                                "score": 1.00058332493804,
+                                "route_sequence": [
+                                    "12_12_out",
+                                    "19_19_out"
+                                ],
+                                "stop_sequence": [
+                                    "9470266_a",
+                                    "9470232_a",
+                                    "9470169_a"
+                                ]
+                            }
+                        }
+                    ],
+                    "KPIASpatialCoverageService": [
+                        {
+                            "od_id_OD_12052000_12052000_1024": {
+                                "score_percent": 4.777888695450919,
+                                "score_ratio": 0.047778886954509193,
+                                "origin_coverage_percent": 17.19065808230724,
+                                "origin_coverage_ratio": 0.17190658082307242,
+                                "destination_coverage_percent": 27.793518273557886,
+                                "destination_coverage_ratio": 0.2779351827355789,
+                                "origin_zone_id": "Z61",
+                                "destination_zone_id": "Z62",
+                                "radius_m": 500.0,
+                                "origin_stop_count": 1,
+                                "destination_stop_count": 1
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "od_id": "OD_12052000_12052000_1032",
+                "kpi_results": {
+                    "Tranfer_rate_caculate": [
+                        {
+                            "agg_itinerary_0": {
+                                "score": "1"
+                            }
+                        },
+                        {
+                            "agg_itinerary_1": {
+                                "score": "1"
+                            }
+                        }
+                    ],
+                    "Cricuity_index_caculate": [
+                        {
+                            "itinerary_0": {
+                                "score": 2.5722932424747746,
+                                "route_sequence": [
+                                    "12_12_in",
+                                    "10_10_out"
+                                ],
+                                "stop_sequence": [
+                                    "9470234_b",
+                                    "9470269_c",
+                                    "9470127_a"
+                                ]
+                            }
+                        },
+                        {
+                            "itinerary_1": {
+                                "score": 2.5722932424747746,
+                                "route_sequence": [
+                                    "19_19_in",
+                                    "10_10_out"
+                                ],
+                                "stop_sequence": [
+                                    "9470234_b",
+                                    "9470269_c",
+                                    "9470127_a"
+                                ]
+                            }
+                        }
+                    ],
+                    "KPIASpatialCoverageService": [
+                        {
+                            "od_id_OD_12052000_12052000_1032": {
+                                "score_percent": 6.383743095439591,
+                                "score_ratio": 0.06383743095439591,
+                                "origin_coverage_percent": 29.38931110779167,
+                                "origin_coverage_ratio": 0.2938931110779167,
+                                "destination_coverage_percent": 21.721309056975947,
+                                "destination_coverage_ratio": 0.2172130905697595,
+                                "origin_zone_id": "Z79",
+                                "destination_zone_id": "Z80",
+                                "radius_m": 500.0,
+                                "origin_stop_count": 1,
+                                "destination_stop_count": 1
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "od_id": "OD_12052000_12052000_1041",
+                "kpi_results": {
+                    "Tranfer_rate_caculate": [
+                        {
+                            "agg_itinerary_0": {
+                                "score": "0"
+                            }
+                        },
+                        {
+                            "agg_itinerary_1": {
+                                "score": "1"
+                            }
+                        }
+                    ],
+                    "Cricuity_index_caculate": [
+                        {
+                            "itinerary_0": {
+                                "score": 1.3928029410471996,
+                                "route_sequence": [
+                                    "19_19_in"
+                                ],
+                                "stop_sequence": [
+                                    "9470155_b",
+                                    "9470206_b"
+                                ]
+                            }
+                        },
+                        {
+                            "itinerary_1": {
+                                "score": 1.1844394215635756,
+                                "route_sequence": [
+                                    "12_12_in",
+                                    "15_15_out"
+                                ],
+                                "stop_sequence": [
+                                    "9470155_b",
+                                    "9470269_c",
+                                    "9470164_a"
+                                ]
+                            }
+                        }
+                    ],
+                    "KPIASpatialCoverageService": [
+                        {
+                            "od_id_OD_12052000_12052000_1041": {
+                                "score_percent": 10.924658384559367,
+                                "score_ratio": 0.10924658384559367,
+                                "origin_coverage_percent": 24.305115900790728,
+                                "origin_coverage_ratio": 0.24305115900790727,
+                                "destination_coverage_percent": 44.947978973447114,
+                                "destination_coverage_ratio": 0.4494797897344711,
+                                "origin_zone_id": "Z99",
+                                "destination_zone_id": "Z100",
+                                "radius_m": 500.0,
+                                "origin_stop_count": 1,
+                                "destination_stop_count": 2
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "od_id": "OD_12052000_12052000_1043",
+                "kpi_results": {
+                    "Tranfer_rate_caculate": [
+                        {
+                            "agg_itinerary_0": {
+                                "score": "0"
+                            }
+                        }
+                    ],
+                    "Cricuity_index_caculate": [
+                        {
+                            "itinerary_0": {
+                                "score": 1.0033824650253207,
+                                "route_sequence": [
+                                    "12_12_out"
+                                ],
+                                "stop_sequence": [
+                                    "9470129_b",
+                                    "9470210_a"
+                                ]
+                            }
+                        }
+                    ],
+                    "KPIASpatialCoverageService": [
+                        {
+                            "od_id_OD_12052000_12052000_1043": {
+                                "score_percent": 2.562728101690051,
+                                "score_ratio": 0.02562728101690051,
+                                "origin_coverage_percent": 10.320723339489863,
+                                "origin_coverage_ratio": 0.10320723339489864,
+                                "destination_coverage_percent": 24.830896221046483,
+                                "destination_coverage_ratio": 0.24830896221046483,
+                                "origin_zone_id": "Z103",
+                                "destination_zone_id": "Z104",
+                                "radius_m": 500.0,
+                                "origin_stop_count": 1,
+                                "destination_stop_count": 1
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "od_id": "OD_12052000_12052000_1050",
+                "kpi_results": {
+                    "Tranfer_rate_caculate": [
+                        {
+                            "agg_itinerary_0": {
+                                "score": "0"
+                            }
+                        }
+                    ],
+                    "Cricuity_index_caculate": [
+                        {
+                            "itinerary_0": {
+                                "score": 1.0,
+                                "route_sequence": [
+                                    "13_13_in"
+                                ],
+                                "stop_sequence": [
+                                    "9470308_b",
+                                    "9470326_d"
+                                ]
+                            }
+                        }
+                    ],
+                    "KPIASpatialCoverageService": [
+                        {
+                            "od_id_OD_12052000_12052000_1050": {
+                                "score_percent": 8.161811711796004,
+                                "score_ratio": 0.08161811711796003,
+                                "origin_coverage_percent": 27.806018593694006,
+                                "origin_coverage_ratio": 0.27806018593694004,
+                                "destination_coverage_percent": 29.352680191499914,
+                                "destination_coverage_ratio": 0.29352680191499914,
+                                "origin_zone_id": "Z119",
+                                "destination_zone_id": "Z120",
+                                "radius_m": 500.0,
+                                "origin_stop_count": 1,
+                                "destination_stop_count": 1
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "od_id": "OD_12052000_12052000_1051",
+                "kpi_results": {
+                    "Tranfer_rate_caculate": [
+                        {
+                            "agg_itinerary_0": {
+                                "score": "1"
+                            }
+                        },
+                        {
+                            "agg_itinerary_1": {
+                                "score": "1"
+                            }
+                        }
+                    ],
+                    "Cricuity_index_caculate": [
+                        {
+                            "itinerary_0": {
+                                "score": 1.7003356179182811,
+                                "route_sequence": [
+                                    "3_3_out",
+                                    "2_2_out"
+                                ],
+                                "stop_sequence": [
+                                    "9470274_a",
+                                    "9470269_a",
+                                    "9470282_a"
+                                ]
+                            }
+                        },
+                        {
+                            "itinerary_1": {
+                                "score": 1.7003356179182811,
+                                "route_sequence": [
+                                    "3_3_out",
+                                    "4_4_in"
+                                ],
+                                "stop_sequence": [
+                                    "9470274_a",
+                                    "9470269_a",
+                                    "9470282_a"
+                                ]
+                            }
+                        }
+                    ],
+                    "KPIASpatialCoverageService": [
+                        {
+                            "od_id_OD_12052000_12052000_1051": {
+                                "score_percent": 9.727842699216081,
+                                "score_ratio": 0.09727842699216081,
+                                "origin_coverage_percent": 23.98123694255403,
+                                "origin_coverage_ratio": 0.2398123694255403,
+                                "destination_coverage_percent": 40.56439091327395,
+                                "destination_coverage_ratio": 0.40564390913273946,
+                                "origin_zone_id": "Z121",
+                                "destination_zone_id": "Z122",
+                                "radius_m": 500.0,
+                                "origin_stop_count": 1,
+                                "destination_stop_count": 2
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "od_id": "OD_12052000_12052000_1052",
+                "kpi_results": {
+                    "Tranfer_rate_caculate": [
+                        {
+                            "agg_itinerary_0": {
+                                "score": "0"
+                            }
+                        }
+                    ],
+                    "Cricuity_index_caculate": [
+                        {
+                            "itinerary_0": {
+                                "score": 1.0005476543971898,
+                                "route_sequence": [
+                                    "19_19_out"
+                                ],
+                                "stop_sequence": [
+                                    "9470269_d",
+                                    "9470171_a"
+                                ]
+                            }
+                        }
+                    ],
+                    "KPIASpatialCoverageService": [
+                        {
+                            "od_id_OD_12052000_12052000_1052": {
+                                "score_percent": 4.3753637800233705,
+                                "score_ratio": 0.043753637800233704,
+                                "origin_coverage_percent": 16.411988413796752,
+                                "origin_coverage_ratio": 0.16411988413796752,
+                                "destination_coverage_percent": 26.659559278906247,
+                                "destination_coverage_ratio": 0.2665955927890625,
+                                "origin_zone_id": "Z123",
+                                "destination_zone_id": "Z124",
+                                "radius_m": 500.0,
+                                "origin_stop_count": 1,
+                                "destination_stop_count": 1
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "od_id": "OD_12052000_12052000_107",
+                "kpi_results": {
+                    "Tranfer_rate_caculate": [
+                        {
+                            "agg_itinerary_0": {
+                                "score": "1"
+                            }
+                        }
+                    ],
+                    "Cricuity_index_caculate": [
+                        {
+                            "itinerary_0": {
+                                "score": 2.65455102500544,
+                                "route_sequence": [
+                                    "10_10_in",
+                                    "19_19_in"
+                                ],
+                                "stop_sequence": [
+                                    "9470150_b",
+                                    "9470232_b",
+                                    "9470220_b"
+                                ]
+                            }
+                        }
+                    ],
+                    "KPIASpatialCoverageService": [
+                        {
+                            "od_id_OD_12052000_12052000_107": {
+                                "score_percent": 11.892421289262222,
+                                "score_ratio": 0.11892421289262221,
+                                "origin_coverage_percent": 23.72253355644792,
+                                "origin_coverage_ratio": 0.23722533556447922,
+                                "destination_coverage_percent": 50.13132876791649,
+                                "destination_coverage_ratio": 0.5013132876791649,
+                                "origin_zone_id": "Z161",
+                                "destination_zone_id": "Z162",
+                                "radius_m": 500.0,
+                                "origin_stop_count": 1,
+                                "destination_stop_count": 3
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "od_id": "OD_12052000_12052000_1072",
+                "kpi_results": {
+                    "Tranfer_rate_caculate": [
+                        {
+                            "agg_itinerary_0": {
+                                "score": "1"
+                            }
+                        }
+                    ],
+                    "Cricuity_index_caculate": [
+                        {
+                            "itinerary_0": {
+                                "score": 5.419019746397025,
+                                "route_sequence": [
+                                    "20_20_out",
+                                    "20_20_in"
+                                ],
+                                "stop_sequence": [
+                                    "9470186_a",
+                                    "9470215_e",
+                                    "9470213_a"
+                                ]
+                            }
+                        }
+                    ],
+                    "KPIASpatialCoverageService": [
+                        {
+                            "od_id_OD_12052000_12052000_1072": {
+                                "score_percent": 5.001373929254167,
+                                "score_ratio": 0.05001373929254167,
+                                "origin_coverage_percent": 22.22565368516586,
+                                "origin_coverage_ratio": 0.2222565368516586,
+                                "destination_coverage_percent": 22.502707907269563,
+                                "destination_coverage_ratio": 0.22502707907269562,
+                                "origin_zone_id": "Z167",
+                                "destination_zone_id": "Z168",
+                                "radius_m": 500.0,
+                                "origin_stop_count": 1,
+                                "destination_stop_count": 1
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "od_id": "OD_12052000_12052000_1073",
+                "kpi_results": {
+                    "Tranfer_rate_caculate": [
+                        {
+                            "agg_itinerary_0": {
+                                "score": "1"
+                            }
+                        }
+                    ],
+                    "Cricuity_index_caculate": [
+                        {
+                            "itinerary_0": {
+                                "score": 1.816904520559911,
+                                "route_sequence": [
+                                    "12_12_out",
+                                    "16_16_out"
+                                ],
+                                "stop_sequence": [
+                                    "9470274_c",
+                                    "9470132_a",
+                                    "9470287_a"
+                                ]
+                            }
+                        }
+                    ],
+                    "KPIASpatialCoverageService": [
+                        {
+                            "od_id_OD_12052000_12052000_1073": {
+                                "score_percent": 7.350181690993088,
+                                "score_ratio": 0.07350181690993088,
+                                "origin_coverage_percent": 25.115977860127103,
+                                "origin_coverage_ratio": 0.25115977860127103,
+                                "destination_coverage_percent": 29.264963251388576,
+                                "destination_coverage_ratio": 0.29264963251388576,
+                                "origin_zone_id": "Z169",
+                                "destination_zone_id": "Z170",
+                                "radius_m": 500.0,
+                                "origin_stop_count": 1,
+                                "destination_stop_count": 1
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "od_id": "OD_12052000_12052000_1074",
+                "kpi_results": {
+                    "Tranfer_rate_caculate": [
+                        {
+                            "agg_itinerary_0": {
+                                "score": "0"
+                            }
+                        }
+                    ],
+                    "Cricuity_index_caculate": [
+                        {
+                            "itinerary_0": {
+                                "score": 1.0,
+                                "route_sequence": [
+                                    "3_3_in"
+                                ],
+                                "stop_sequence": [
+                                    "9470265_b",
+                                    "9470223_b"
+                                ]
+                            }
+                        }
+                    ],
+                    "KPIASpatialCoverageService": [
+                        {
+                            "od_id_OD_12052000_12052000_1074": {
+                                "score_percent": 7.152484699419773,
+                                "score_ratio": 0.07152484699419773,
+                                "origin_coverage_percent": 26.437115271870777,
+                                "origin_coverage_ratio": 0.26437115271870776,
+                                "destination_coverage_percent": 27.054709357908095,
+                                "destination_coverage_ratio": 0.27054709357908097,
+                                "origin_zone_id": "Z171",
+                                "destination_zone_id": "Z172",
+                                "radius_m": 500.0,
+                                "origin_stop_count": 1,
+                                "destination_stop_count": 1
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "od_id": "OD_12052000_12052000_1075",
+                "kpi_results": {
+                    "Tranfer_rate_caculate": [
+                        {
+                            "agg_itinerary_0": {
+                                "score": "1"
+                            }
+                        },
+                        {
+                            "agg_itinerary_1": {
+                                "score": "1"
+                            }
+                        }
+                    ],
+                    "Cricuity_index_caculate": [
+                        {
+                            "itinerary_0": {
+                                "score": 1.0255623550708348,
+                                "route_sequence": [
+                                    "15_15_out",
+                                    "10_10_out"
+                                ],
+                                "stop_sequence": [
+                                    "9470128_a",
+                                    "9470269_c",
+                                    "9470127_a"
+                                ]
+                            }
+                        },
+                        {
+                            "itinerary_1": {
+                                "score": 1.0149212453171184,
+                                "route_sequence": [
+                                    "21_21_in",
+                                    "10_10_out"
+                                ],
+                                "stop_sequence": [
+                                    "9470128_a",
+                                    "9470155_a",
+                                    "9470127_a"
+                                ]
+                            }
+                        }
+                    ],
+                    "KPIASpatialCoverageService": [
+                        {
+                            "od_id_OD_12052000_12052000_1075": {
+                                "score_percent": 5.823940230888853,
+                                "score_ratio": 0.058239402308888535,
+                                "origin_coverage_percent": 22.742233487386482,
+                                "origin_coverage_ratio": 0.22742233487386482,
+                                "destination_coverage_percent": 25.608479633801068,
+                                "destination_coverage_ratio": 0.2560847963380107,
+                                "origin_zone_id": "Z173",
+                                "destination_zone_id": "Z174",
+                                "radius_m": 500.0,
+                                "origin_stop_count": 1,
+                                "destination_stop_count": 1
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "od_id": "OD_12052000_12052000_112",
+                "kpi_results": {
+                    "Tranfer_rate_caculate": [
+                        {
+                            "agg_itinerary_0": {
+                                "score": "1"
+                            }
+                        }
+                    ],
+                    "Cricuity_index_caculate": [
+                        {
+                            "itinerary_0": {
+                                "score": 1.2097238413248288,
+                                "route_sequence": [
+                                    "15_15_in",
+                                    "12_12_out"
+                                ],
+                                "stop_sequence": [
+                                    "9470257_b",
+                                    "9470269_d",
+                                    "9470176_a"
+                                ]
+                            }
+                        }
+                    ],
+                    "KPIASpatialCoverageService": [
+                        {
+                            "od_id_OD_12052000_12052000_112": {
+                                "score_percent": 2.921799721279998,
+                                "score_ratio": 0.02921799721279998,
+                                "origin_coverage_percent": 18.585099599437484,
+                                "origin_coverage_ratio": 0.18585099599437482,
+                                "destination_coverage_percent": 15.721194851000059,
+                                "destination_coverage_ratio": 0.1572119485100006,
+                                "origin_zone_id": "Z273",
+                                "destination_zone_id": "Z274",
+                                "radius_m": 500.0,
+                                "origin_stop_count": 1,
+                                "destination_stop_count": 1
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "od_id": "OD_12052000_12052000_1121",
+                "kpi_results": {
+                    "Tranfer_rate_caculate": [
+                        {
+                            "agg_itinerary_0": {
+                                "score": "1"
+                            }
+                        }
+                    ],
+                    "Cricuity_index_caculate": [
+                        {
+                            "itinerary_0": {
+                                "score": 2.2361805874020644,
+                                "route_sequence": [
+                                    "10_10_in",
+                                    "19_19_in"
+                                ],
+                                "stop_sequence": [
+                                    "9470159_b",
+                                    "9470232_b",
+                                    "9470095_b"
+                                ]
+                            }
+                        }
+                    ],
+                    "KPIASpatialCoverageService": [
+                        {
+                            "od_id_OD_12052000_12052000_1121": {
+                                "score_percent": 15.065937990629408,
+                                "score_ratio": 0.15065937990629408,
+                                "origin_coverage_percent": 28.772527868461278,
+                                "origin_coverage_ratio": 0.2877252786846128,
+                                "destination_coverage_percent": 52.36223268079196,
+                                "destination_coverage_ratio": 0.5236223268079196,
+                                "origin_zone_id": "Z277",
+                                "destination_zone_id": "Z278",
+                                "radius_m": 500.0,
+                                "origin_stop_count": 1,
+                                "destination_stop_count": 3
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "od_id": "OD_12052000_12052000_1122",
+                "kpi_results": {
+                    "Tranfer_rate_caculate": [
+                        {
+                            "agg_itinerary_0": {
+                                "score": "0"
+                            }
+                        }
+                    ],
+                    "Cricuity_index_caculate": [
+                        {
+                            "itinerary_0": {
+                                "score": 1.1981449946352993,
+                                "route_sequence": [
+                                    "3_3_out"
+                                ],
+                                "stop_sequence": [
+                                    "9470268_e",
+                                    "9470228_a"
+                                ]
+                            }
+                        }
+                    ],
+                    "KPIASpatialCoverageService": [
+                        {
+                            "od_id_OD_12052000_12052000_1122": {
+                                "score_percent": 9.664979926868106,
+                                "score_ratio": 0.09664979926868107,
+                                "origin_coverage_percent": 33.03309465313922,
+                                "origin_coverage_ratio": 0.3303309465313922,
+                                "destination_coverage_percent": 29.258475563232217,
+                                "destination_coverage_ratio": 0.29258475563232217,
+                                "origin_zone_id": "Z279",
+                                "destination_zone_id": "Z280",
+                                "radius_m": 500.0,
+                                "origin_stop_count": 2,
+                                "destination_stop_count": 1
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "od_id": "OD_12052000_12052000_1126",
+                "kpi_results": {
+                    "Tranfer_rate_caculate": [
+                        {
+                            "agg_itinerary_0": {
+                                "score": "0"
+                            }
+                        }
+                    ],
+                    "Cricuity_index_caculate": [
+                        {
+                            "itinerary_0": {
+                                "score": 1.040903871907752,
+                                "route_sequence": [
+                                    "21_21_out"
+                                ],
+                                "stop_sequence": [
+                                    "9470098_a",
+                                    "9470235_a"
+                                ]
+                            }
+                        }
+                    ],
+                    "KPIASpatialCoverageService": [
+                        {
+                            "od_id_OD_12052000_12052000_1126": {
+                                "score_percent": 5.871718377257807,
+                                "score_ratio": 0.05871718377257806,
+                                "origin_coverage_percent": 29.399601761016992,
+                                "origin_coverage_ratio": 0.2939960176101699,
+                                "destination_coverage_percent": 19.972101748138414,
+                                "destination_coverage_ratio": 0.19972101748138413,
+                                "origin_zone_id": "Z287",
+                                "destination_zone_id": "Z288",
+                                "radius_m": 500.0,
+                                "origin_stop_count": 1,
+                                "destination_stop_count": 1
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "od_id": "OD_12052000_12052000_1136",
+                "kpi_results": {
+                    "Tranfer_rate_caculate": [
+                        {
+                            "agg_itinerary_0": {
+                                "score": "1"
+                            }
+                        }
+                    ],
+                    "Cricuity_index_caculate": [
+                        {
+                            "itinerary_0": {
+                                "score": 9.482974182907443,
+                                "route_sequence": [
+                                    "10_10_in",
+                                    "12_12_out"
+                                ],
+                                "stop_sequence": [
+                                    "9470285_a",
+                                    "9470269_d",
+                                    "9470371_a"
+                                ]
+                            }
+                        }
+                    ],
+                    "KPIASpatialCoverageService": [
+                        {
+                            "od_id_OD_12052000_12052000_1136": {
+                                "score_percent": 5.631769875658269,
+                                "score_ratio": 0.05631769875658269,
+                                "origin_coverage_percent": 29.380402664813143,
+                                "origin_coverage_ratio": 0.29380402664813143,
+                                "destination_coverage_percent": 19.168457083139458,
+                                "destination_coverage_ratio": 0.1916845708313946,
+                                "origin_zone_id": "Z309",
+                                "destination_zone_id": "Z310",
+                                "radius_m": 500.0,
+                                "origin_stop_count": 1,
+                                "destination_stop_count": 1
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "od_id": "OD_12052000_12052000_1140",
+                "kpi_results": {
+                    "Tranfer_rate_caculate": [
+                        {
+                            "agg_itinerary_0": {
+                                "score": "1"
+                            }
+                        }
+                    ],
+                    "Cricuity_index_caculate": [
+                        {
+                            "itinerary_0": {
+                                "score": 1.001485487149096,
+                                "route_sequence": [
+                                    "19_19_in",
+                                    "12_12_in"
+                                ],
+                                "stop_sequence": [
+                                    "9470169_b",
+                                    "9470232_b",
+                                    "9470156_b"
+                                ]
+                            }
+                        }
+                    ],
+                    "KPIASpatialCoverageService": [
+                        {
+                            "od_id_OD_12052000_12052000_1140": {
+                                "score_percent": 4.26755585134954,
+                                "score_ratio": 0.0426755585134954,
+                                "origin_coverage_percent": 18.207873334358986,
+                                "origin_coverage_ratio": 0.18207873334358987,
+                                "destination_coverage_percent": 23.437969789126832,
+                                "destination_coverage_ratio": 0.23437969789126833,
+                                "origin_zone_id": "Z319",
+                                "destination_zone_id": "Z320",
+                                "radius_m": 500.0,
+                                "origin_stop_count": 1,
+                                "destination_stop_count": 1
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "od_id": "OD_12052000_12052000_1141",
+                "kpi_results": {
+                    "Tranfer_rate_caculate": [
+                        {
+                            "agg_itinerary_0": {
+                                "score": "1"
+                            }
+                        }
+                    ],
+                    "Cricuity_index_caculate": [
+                        {
+                            "itinerary_0": {
+                                "score": 4.0549413597216235,
+                                "route_sequence": [
+                                    "16_16_in",
+                                    "15_15_in"
+                                ],
+                                "stop_sequence": [
+                                    "9470196_b",
+                                    "9470268_c",
+                                    "9470269_d"
+                                ]
+                            }
+                        }
+                    ],
+                    "KPIASpatialCoverageService": [
+                        {
+                            "od_id_OD_12052000_12052000_1141": {
+                                "score_percent": 4.513371734180924,
+                                "score_ratio": 0.045133717341809244,
+                                "origin_coverage_percent": 23.223754482869964,
+                                "origin_coverage_ratio": 0.23223754482869963,
+                                "destination_coverage_percent": 19.434289737733945,
+                                "destination_coverage_ratio": 0.19434289737733945,
+                                "origin_zone_id": "Z321",
+                                "destination_zone_id": "Z322",
+                                "radius_m": 500.0,
+                                "origin_stop_count": 1,
+                                "destination_stop_count": 1
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "od_id": "OD_12052000_12052000_1155",
+                "kpi_results": {
+                    "Tranfer_rate_caculate": [
+                        {
+                            "agg_itinerary_0": {
+                                "score": "1"
+                            }
+                        },
+                        {
+                            "agg_itinerary_1": {
+                                "score": "1"
+                            }
+                        }
+                    ],
+                    "Cricuity_index_caculate": [
+                        {
+                            "itinerary_0": {
+                                "score": 9.482974182907443,
+                                "route_sequence": [
+                                    "10_10_in",
+                                    "12_12_out"
+                                ],
+                                "stop_sequence": [
+                                    "9470285_a",
+                                    "9470269_d",
+                                    "9470371_a"
+                                ]
+                            }
+                        },
+                        {
+                            "itinerary_1": {
+                                "score": 13.821398484604021,
+                                "route_sequence": [
+                                    "10_10_in",
+                                    "19_19_out"
+                                ],
+                                "stop_sequence": [
+                                    "9470285_a",
+                                    "9470269_d",
+                                    "9470270_a"
+                                ]
+                            }
+                        }
+                    ],
+                    "KPIASpatialCoverageService": [
+                        {
+                            "od_id_OD_12052000_12052000_1155": {
+                                "score_percent": 4.506374014521418,
+                                "score_ratio": 0.04506374014521418,
+                                "origin_coverage_percent": 23.50932052056092,
+                                "origin_coverage_ratio": 0.2350932052056092,
+                                "destination_coverage_percent": 19.168457083139458,
+                                "destination_coverage_ratio": 0.1916845708313946,
+                                "origin_zone_id": "Z351",
+                                "destination_zone_id": "Z352",
+                                "radius_m": 500.0,
+                                "origin_stop_count": 1,
+                                "destination_stop_count": 1
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "od_id": "OD_12052000_12052000_1158",
+                "kpi_results": {
+                    "Tranfer_rate_caculate": [
+                        {
+                            "agg_itinerary_0": {
+                                "score": "0"
+                            }
+                        }
+                    ],
+                    "Cricuity_index_caculate": [
+                        {
+                            "itinerary_0": {
+                                "score": 2.4446025098088278,
+                                "route_sequence": [
+                                    "16_16_out"
+                                ],
+                                "stop_sequence": [
+                                    "9470226_a",
+                                    "9470189_a"
+                                ]
+                            }
+                        }
+                    ],
+                    "KPIASpatialCoverageService": [
+                        {
+                            "od_id_OD_12052000_12052000_1158": {
+                                "score_percent": 9.66408937083012,
+                                "score_ratio": 0.09664089370830119,
+                                "origin_coverage_percent": 50.14420824452637,
+                                "origin_coverage_ratio": 0.5014420824452637,
+                                "destination_coverage_percent": 19.27259340441382,
+                                "destination_coverage_ratio": 0.19272593404413818,
+                                "origin_zone_id": "Z357",
+                                "destination_zone_id": "Z358",
+                                "radius_m": 500.0,
+                                "origin_stop_count": 2,
+                                "destination_stop_count": 1
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "od_id": "OD_12052000_12052000_1159",
+                "kpi_results": {
+                    "Tranfer_rate_caculate": [
+                        {
+                            "agg_itinerary_0": {
+                                "score": "1"
+                            }
+                        }
+                    ],
+                    "Cricuity_index_caculate": [
+                        {
+                            "itinerary_0": {
+                                "score": 1.113125636288195,
+                                "route_sequence": [
+                                    "19_19_in",
+                                    "15_15_out"
+                                ],
+                                "stop_sequence": [
+                                    "9470243_b",
+                                    "9470162_a",
+                                    "9470229_a"
+                                ]
+                            }
+                        }
+                    ],
+                    "KPIASpatialCoverageService": [
+                        {
+                            "od_id_OD_12052000_12052000_1159": {
+                                "score_percent": 6.12417569908171,
+                                "score_ratio": 0.0612417569908171,
+                                "origin_coverage_percent": 23.75125307769311,
+                                "origin_coverage_ratio": 0.2375125307769311,
+                                "destination_coverage_percent": 25.784642515697254,
+                                "destination_coverage_ratio": 0.25784642515697254,
+                                "origin_zone_id": "Z359",
+                                "destination_zone_id": "Z360",
+                                "radius_m": 500.0,
+                                "origin_stop_count": 1,
+                                "destination_stop_count": 1
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "od_id": "OD_12052000_12052000_1161",
+                "kpi_results": {
+                    "Tranfer_rate_caculate": [
+                        {
+                            "agg_itinerary_0": {
+                                "score": "0"
+                            }
+                        }
+                    ],
+                    "Cricuity_index_caculate": [
+                        {
+                            "itinerary_0": {
+                                "score": 1.0061345053467088,
+                                "route_sequence": [
+                                    "16_16_in"
+                                ],
+                                "stop_sequence": [
+                                    "9445454_b",
+                                    "9470189_b"
+                                ]
+                            }
+                        }
+                    ],
+                    "KPIASpatialCoverageService": [
+                        {
+                            "od_id_OD_12052000_12052000_1161": {
+                                "score_percent": 9.013773897806509,
+                                "score_ratio": 0.09013773897806508,
+                                "origin_coverage_percent": 38.225598691021034,
+                                "origin_coverage_ratio": 0.38225598691021034,
+                                "destination_coverage_percent": 23.580464940955366,
+                                "destination_coverage_ratio": 0.23580464940955367,
+                                "origin_zone_id": "Z365",
+                                "destination_zone_id": "Z366",
+                                "radius_m": 500.0,
+                                "origin_stop_count": 2,
+                                "destination_stop_count": 1
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "od_id": "OD_12052000_12052000_1166",
+                "kpi_results": {
+                    "Tranfer_rate_caculate": [
+                        {
+                            "agg_itinerary_0": {
+                                "score": "0"
+                            }
+                        }
+                    ],
+                    "Cricuity_index_caculate": [
+                        {
+                            "itinerary_0": {
+                                "score": 1.0043668322083243,
+                                "route_sequence": [
+                                    "12_12_out"
+                                ],
+                                "stop_sequence": [
+                                    "9470266_a",
+                                    "9470176_a"
+                                ]
+                            }
+                        }
+                    ],
+                    "KPIASpatialCoverageService": [
+                        {
+                            "od_id_OD_12052000_12052000_1166": {
+                                "score_percent": 1.8153936628202212,
+                                "score_ratio": 0.01815393662820221,
+                                "origin_coverage_percent": 9.140310657752142,
+                                "origin_coverage_ratio": 0.09140310657752142,
+                                "destination_coverage_percent": 19.861400020146334,
+                                "destination_coverage_ratio": 0.19861400020146333,
+                                "origin_zone_id": "Z375",
+                                "destination_zone_id": "Z376",
+                                "radius_m": 500.0,
+                                "origin_stop_count": 1,
+                                "destination_stop_count": 1
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "od_id": "OD_12052000_12052000_1169",
+                "kpi_results": {
+                    "Tranfer_rate_caculate": [
+                        {
+                            "agg_itinerary_0": {
+                                "score": "0"
+                            }
+                        }
+                    ],
+                    "Cricuity_index_caculate": [
+                        {
+                            "itinerary_0": {
+                                "score": 1.0,
+                                "route_sequence": [
+                                    "10_10_out"
+                                ],
+                                "stop_sequence": [
+                                    "9470150_a",
+                                    "9470264_a"
+                                ]
+                            }
+                        }
+                    ],
+                    "KPIASpatialCoverageService": [
+                        {
+                            "od_id_OD_12052000_12052000_1169": {
+                                "score_percent": 4.489307537608869,
+                                "score_ratio": 0.044893075376088686,
+                                "origin_coverage_percent": 21.876117365302612,
+                                "origin_coverage_ratio": 0.2187611736530261,
+                                "destination_coverage_percent": 20.521500514205933,
+                                "destination_coverage_ratio": 0.20521500514205931,
+                                "origin_zone_id": "Z381",
+                                "destination_zone_id": "Z382",
+                                "radius_m": 500.0,
+                                "origin_stop_count": 1,
+                                "destination_stop_count": 1
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "od_id": "OD_12052000_12052000_117",
+                "kpi_results": {
+                    "Tranfer_rate_caculate": [
+                        {
+                            "agg_itinerary_0": {
+                                "score": "1"
+                            }
+                        }
+                    ],
+                    "Cricuity_index_caculate": [
+                        {
+                            "itinerary_0": {
+                                "score": 6.7863975882222745,
+                                "route_sequence": [
+                                    "10_10_in",
+                                    "12_12_out"
+                                ],
+                                "stop_sequence": [
+                                    "9470123_a",
+                                    "9470269_d",
+                                    "9470176_a"
+                                ]
+                            }
+                        }
+                    ],
+                    "KPIASpatialCoverageService": [
+                        {
+                            "od_id_OD_12052000_12052000_117": {
+                                "score_percent": 4.620530427627322,
+                                "score_ratio": 0.046205304276273215,
+                                "origin_coverage_percent": 28.66105107374452,
+                                "origin_coverage_ratio": 0.2866105107374452,
+                                "destination_coverage_percent": 16.12128744245546,
+                                "destination_coverage_ratio": 0.16121287442455462,
+                                "origin_zone_id": "Z383",
+                                "destination_zone_id": "Z384",
+                                "radius_m": 500.0,
+                                "origin_stop_count": 1,
+                                "destination_stop_count": 1
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "od_id": "OD_12052000_12052000_1171",
+                "kpi_results": {
+                    "Tranfer_rate_caculate": [
+                        {
+                            "agg_itinerary_0": {
+                                "score": "1"
+                            }
+                        }
+                    ],
+                    "Cricuity_index_caculate": [
+                        {
+                            "itinerary_0": {
+                                "score": 2.8866031291306946,
+                                "route_sequence": [
+                                    "1_1_out",
+                                    "16_16_out"
+                                ],
+                                "stop_sequence": [
+                                    "9470105_a",
+                                    "9470000_a",
+                                    "9445455_a"
+                                ]
+                            }
+                        }
+                    ],
+                    "KPIASpatialCoverageService": [
+                        {
+                            "od_id_OD_12052000_12052000_1171": {
+                                "score_percent": 7.156289152880067,
+                                "score_ratio": 0.07156289152880067,
+                                "origin_coverage_percent": 12.545158062181109,
+                                "origin_coverage_ratio": 0.12545158062181108,
+                                "destination_coverage_percent": 57.04423266258848,
+                                "destination_coverage_ratio": 0.5704423266258848,
+                                "origin_zone_id": "Z387",
+                                "destination_zone_id": "Z388",
+                                "radius_m": 500.0,
+                                "origin_stop_count": 1,
+                                "destination_stop_count": 2
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "od_id": "OD_12052000_12052000_1173",
+                "kpi_results": {
+                    "Tranfer_rate_caculate": [
+                        {
+                            "agg_itinerary_0": {
+                                "score": "1"
+                            }
+                        }
+                    ],
+                    "Cricuity_index_caculate": [
+                        {
+                            "itinerary_0": {
+                                "score": 2.1803954026557726,
+                                "route_sequence": [
+                                    "3_3_in",
+                                    "4_4_out"
+                                ],
+                                "stop_sequence": [
+                                    "9470321_b",
+                                    "9470205_b",
+                                    "9470222_a"
+                                ]
+                            }
+                        }
+                    ],
+                    "KPIASpatialCoverageService": [
+                        {
+                            "od_id_OD_12052000_12052000_1173": {
+                                "score_percent": 8.594898482379252,
+                                "score_ratio": 0.08594898482379253,
+                                "origin_coverage_percent": 29.30775897842016,
+                                "origin_coverage_ratio": 0.2930775897842016,
+                                "destination_coverage_percent": 29.32635855476986,
+                                "destination_coverage_ratio": 0.2932635855476986,
+                                "origin_zone_id": "Z391",
+                                "destination_zone_id": "Z392",
+                                "radius_m": 500.0,
+                                "origin_stop_count": 1,
+                                "destination_stop_count": 1
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}
