@@ -3,7 +3,7 @@ from domain.entities_and_dataclass.domain_class import Stop, Route, Zone, Itiner
 
 def find_all_routes_pass_through_zone(Z: Zone, R_list : List[Route]) -> List[Route]:
     """
-    Lọc ra danh sách các tuyến đường có đi qua một Zone cụ thể.
+    Lọc ra danh sách các tuyến đường có đi qua một Zone cụ thể và có trạm dừng trên zone đó.
     Thuật toán mới sử dụng Topology của thư viện shapely để kiểm tra giao cắt.
     """
     passing_routes = []
@@ -14,15 +14,10 @@ def find_all_routes_pass_through_zone(Z: Zone, R_list : List[Route]) -> List[Rou
         
     for route in R_list:
         # Kiểm tra cực ngắn qua phép giao C++ (cực kỳ nhanh so với lặp từng Point)
-        if getattr(route, 'linestring', None) is not None:
-            if Z.polygon.intersects(route.linestring):
+        for stop in route.stops_seq:
+            if Z.is_point_in_zone(stop.coord):
                 passing_routes.append(route)
-        else:
-            # Fallback dự phòng như code cũ nếu Route không có linestring
-            for point in route.shape:
-                if Z.is_point_in_zone(point):
-                    passing_routes.append(route)
-                    break 
+                break
                    
     return passing_routes            
 
@@ -38,7 +33,7 @@ def find_all_stops_on_a_route_located_in_a_certain_zone(Z: Zone, R: Route) -> Li
                 
     return passing_stops
 
-def find_cricuity_index_of_a_itinerary(I: Itinerary, R_list: List[Route]) -> float:
+def find_cricuity_index_of_a_itinerary(I: Itinerary, R_list : List[Route]) -> float:
     """
     Tính độ vòng vèo (Circuity Index) của một hành trình chi tiết.
     Bằng tổng khoảng cách thực tế đi dọc THEO TUYẾN BUS chia cho 
@@ -49,6 +44,7 @@ def find_cricuity_index_of_a_itinerary(I: Itinerary, R_list: List[Route]) -> flo
     
     for leg in I.legs:
         route = next((r for r in R_list if r.id == leg.route_ref_id), None)
+        
         if route:
             # Tra cứu đối tượng Stop từ file gốc
             start_stop = next((s for s in route.stops_seq if s.id == leg.board_stop_id), None)
@@ -56,8 +52,18 @@ def find_cricuity_index_of_a_itinerary(I: Itinerary, R_list: List[Route]) -> flo
             
             if start_stop and end_stop:
                 total_route_dist += route.get_distance_between_stops(start_stop, end_stop)
-                total_straight_dist += start_stop.coord.distance_to(end_stop.coord)
-                
+            
+
+    start_stop_id = I.get_origin_stops_id
+    end_stop_id = I.get_destination_stops_id
+    
+    # Do start_stop_id chỉ là String (Ví dụ "S1"), ta phải tìm Object Stop thật sự trong R_list để đo toạ độ
+    start_stop = next((s for r in R_list for s in r.stops_seq if s.id == start_stop_id), None)
+    end_stop = next((s for r in R_list for s in r.stops_seq if s.id == end_stop_id), None)
+    
+    total_straight_dist = 0.0
+    if start_stop and end_stop:
+        total_straight_dist = start_stop.coord.distance_to(end_stop.coord)
     if total_straight_dist == 0:
         return 1.0
         

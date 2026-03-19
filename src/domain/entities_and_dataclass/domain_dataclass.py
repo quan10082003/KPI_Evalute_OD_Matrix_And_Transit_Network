@@ -50,15 +50,25 @@ class Itinerary:
     def total_transfers(self) -> int:
         return len(self.legs) - 1
     @property
-    def set_origin_stops_id(self) -> Set[str]:
+    def get_origin_stops_id(self) -> str:
         if not self.legs: return set()
         # Chỉ lấy các bến lên xe của chặng ĐẦU TIÊN
         return self.legs[0].board_stop_id    
     @property
-    def set_destination_stops_id(self) -> Set[str]:
+    def get_destination_stops_id(self) -> str:
         if not self.legs: return set()
         # Chỉ lấy các bến xuống xe của chặng CUỐI CÙNG
         return self.legs[-1].alight_stop_id
+
+    @property
+    def get_list_stops_id(self) -> List[str]:
+        if not self.legs: return []
+        return [leg.board_stop_id for leg in self.legs] + [self.legs[-1].alight_stop_id]
+
+    @property
+    def get_list_routes_id(self) -> List[str]:
+        if not self.legs: return []
+        return [leg.route_ref_id for leg in self.legs]
 
 
 @dataclass(frozen=True)
@@ -76,12 +86,12 @@ class AggregatedItinerary:
     def total_transfers(self) -> int:
         return len(self.legs) - 1
     @property
-    def set_origin_stops_id(self) -> Set[str]:
+    def get_origin_stops_id(self) -> Set[str]:
         if not self.legs: return set()
         # Chỉ lấy các bến lên xe của chặng ĐẦU TIÊN
         return self.legs[0].possible_board_stop_ids    
     @property
-    def set_destination_stops_id(self) -> Set[str]:
+    def get_destination_stops_id(self) -> Set[str]:
         if not self.legs: return set()
         # Chỉ lấy các bến xuống xe của chặng CUỐI CÙNG
         return self.legs[-1].possible_alight_stop_ids
@@ -89,24 +99,19 @@ class AggregatedItinerary:
 
 @dataclass
 class ODRoutingResult:
-    """
-    Kết quả của bước Tiền xử lý (Preprocessing) cho 1 cặp OD.
-    Đây là đầu ra của Routing Engine và là đầu vào cho KPI Service.
-    """
     od_id: str
-    origin_zone_id: str
-    destination_zone_id: str
-    travel_demand: int
-    itineraries: List[Itinerary]  # Danh sách các hành trình khả thi tìm được
+    aggregated_itineraries: List[AggregatedItinerary]
+    represent_itineraries: List[Itinerary]
+    
+    @property
+    def total_aggregated_itineraries(self) -> int:
+        return len(self.aggregated_itineraries)
 
     @property
-    def is_connected(self) -> bool:
-        """True nếu tìm được ít nhất 1 hành trình kết nối OD."""
-        return len(self.itineraries) > 0
-
+    def total_direct_itineraries(self) -> int:
+        return len([agg for agg in self.aggregated_itineraries if agg.total_transfers == 0])
+    
     @property
-    def best_itinerary(self) -> 'Itinerary | None':
-        """Trả về hành trình tốt nhất (ưu tiên ít transfer nhất)."""
-        if not self.itineraries:
-            return None
-        return min(self.itineraries, key=lambda it: it.total_transfers)
+    def total_one_transfer_itineraries(self) -> int:
+        return len([agg for agg in self.aggregated_itineraries if agg.total_transfers == 1])
+    

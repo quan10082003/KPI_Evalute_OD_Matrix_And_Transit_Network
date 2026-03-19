@@ -1,0 +1,2 @@
+Về thiết kế đầu vào ra cho các domain kpi sẻvice
+ĐẦu vào sẽ là ODRoutingResult -> đầu ra là dict chứa thông tin số lần chuyển tuyến + độ trực tiếp + ( các route trên hành trình đó, các stop trên hành trìn đó)

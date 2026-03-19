@@ -42,7 +42,9 @@ class DirectConnectionRoutingEngine(AbstractRoutingEngine):
     Sử dụng Toán tử Set và Mảng index tĩnh O(1).
     """
     def _find_aggregated_itineraries(self, od_pair: ODPair, routes: List[Route]) -> List[AggregatedItinerary]:
-        
+        """
+        Note: Có tuyến hành trình chuyển tuyến <=1 lần thì mới tạo đối tượng AggregatedItinerary
+        """
         # Logic O(1) Lookup từ Hash Map
        
         routes_in_origin = find_all_routes_pass_through_zone(od_pair.origin_area, routes)
@@ -90,8 +92,12 @@ class OneTransferRoutingEngine(AbstractRoutingEngine):
     """
     Engine tìm đường gián tiếp qua 1 lần đổi chuyến (1-transfer).
     Sử dụng Array Hash Map để giảm Complexity O(N).
+    
     """
     def _find_aggregated_itineraries(self, od_pair: ODPair, routes: List[Route]) -> List[AggregatedItinerary]:
+        """
+        Note: Có tuyến hành trình chuyển tuyến <=1 lần thì mới tạo đối tượng AggregatedItinerary
+        """
         routes_in_origin = find_all_routes_pass_through_zone(od_pair.origin_area, routes)
         routes_in_dest = find_all_routes_pass_through_zone(od_pair.destination_area, routes)
         
