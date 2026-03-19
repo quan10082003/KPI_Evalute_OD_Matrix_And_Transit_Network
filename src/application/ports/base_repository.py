@@ -8,17 +8,13 @@ class EvaluationDataRepository(ABC):
     Interface (Port) của Application Layer – định nghĩa hợp đồng tải dữ liệu đầu vào.
     Application Service phụ thuộc vào interface này, KHÔNG phụ thuộc vào chi tiết cài đặt.
 
-    Các implementation (Adapter) cụ thể nằm ở Infrastructure Layer:
-      - CottbusXmlRepository  : Load từ file XML (Phase 1 POC)
-      - DatabaseRepository    : Load từ Database (Phase 2 – tương lai)
-      - ApiRepository         : Gọi REST API ngoài (Phase 2 – tương lai)
+    Các implementation (Adapter) cụ thể nằm ở Infrastructure Layer.
     """
 
     @abstractmethod
     def load_network_and_demand(self) -> Tuple[List[Stop], List[Route], List[Zone], List[ODPair]]:
         """
         Tải toàn bộ mạng lưới giao thông và ma trận nhu cầu đi lại.
-
         :return: Tuple (stops, routes, zones, od_pairs)
         """
         pass

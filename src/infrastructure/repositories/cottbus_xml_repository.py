@@ -1,6 +1,6 @@
 import xml.etree.ElementTree as ET
 from typing import List, Tuple, Dict
-from application.base_repository import EvaluationDataRepository
+from application.ports.base_repository import EvaluationDataRepository
 from domain.entities_and_dataclass.domain_class import Stop, Route, Zone, ODPair
 from domain.entities_and_dataclass.domain_dataclass import Direction, Point
 
