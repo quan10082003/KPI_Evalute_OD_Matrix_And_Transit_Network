@@ -1,68 +1,40 @@
-# Báo cáo Phân tích và Đọc hiểu Mã nguồn Dự án `KPI_Evaluate` (Đã nâng cấp)
+# KPI Evaluate OD Matrix and Transit Network
 
-Dự án này (`KPI_Evaluate`) thuộc về công việc đánh giá các Chỉ số hiệu suất cốt lõi (KPI) liên quan đến Dữ liệu Ma trận Origin-Destination (OD - Điểm đi và Điểm đến) và Dữ liệu Mạng lưới Xe buýt (Transit Network).
+## Tổng quan (Overview)
+Dự án này cung cấp một công cụ đánh giá mạng lưới giao thông công cộng (cụ thể là mạng lưới xe buýt) dựa trên dữ liệu ma trận OD (Origin-Destination) và dữ liệu hành trình tuyến. Mục tiêu chính là tính toán các chỉ số KPI (Key Performance Indicators) quan trọng nhằm đánh giá hiệu quả kết nối của hệ thống mạng lưới xe buýt hiện có, hỗ trợ cho việc quy hoạch.
 
-Dưới đây là các diễn giải chi tiết về cấu trúc mã nguồn, ý nghĩa của các file và luồng logic thu thập được từ kiến trúc hệ thống **Domain-Driven Design (DDD)** đã được tinh biến và tối ưu hóa hiệu năng trong thư mục `domain/`.
+## Các tính năng chính (Key Features)
+- **Tải và Tiền xử lý dữ liệu (Data Loading & Preprocessing):** Hỗ trợ đọc dữ liệu mạng lưới (Stops, Routes) và nhu cầu đi lại (Zones, OD Pairs) từ các tệp định dạng XML (theo cấu trúc tựa MATSim/Cottbus).
+- **Tìm kiếm Đường đi (Routing Engine):** 
+  - Tìm kiếm kết nối trực tiếp (Direct Connection) không cần chuyển tuyến.
+  - Tìm kiếm kết nối 1 lần chuyển tuyến (One Transfer Connection) với thuật toán tối ưu lộ trình đi bộ và khoảng cách.
+- **Tính toán KPI:**
+  - **Tỷ lệ chuyển tuyến (Transfer Rate):** Đánh giá số lần hành khách cần chuyển tiếp giữa các tuyến buýt với các điểm đi - đến khác nhau.
+  - **Chỉ số vòng vèo (Circuity Index):** So sánh khoảng cách di chuyển thực tế trên tuyến đường (`L_route`) với khoảng cách đường chim bay (`L_straight`), qua đó đánh giá độ "thẳng" và tối ưu của lộ trình.
+  - **Độ bao phủ không gian (Spatial Coverage):** Tính toán độ bao phủ diện tích bán kính đi bộ của hệ thống trạm dừng xe buýt (mặc định 500m) đối chiếu vào diện tích không gian hai khu vực xuất phát và đích đến (Origination/Destination Zones).
+- **Xuất báo cáo (Exporting):** Tự động tổng hợp dữ liệu, lọc các chu trình không đạt và kết xuất KPIs dưới dạng JSON tinh gọn cho phép các dashboard báo cáo / Frontend xử lý kết quả hiệu quả.
 
-## 1. Tổng quan cấu trúc dự án (Kiến trúc Mới)
-Hệ thống nay đã thiết lập phân rã rõ ràng giữa Pure Data, Domain Model (Entities), Utility Services và Core Logic Services (như Routing Engine phân lớp).
-Các tệp và phân vùng mã nguồn chính bao gồm:
-* `domain/entities_and_dataclass/domain_dataclass.py`: Chứa các cấu trúc dữ liệu thuần túy bằng thư viện `@dataclass` lõi.
-* `domain/entities_and_dataclass/domain_class.py`: Lớp thực thể (Domain Models) kết hợp tương tác Hình học nâng cao (Geometry/Topology) dựa trên thư viện Shapely siêu tốc và Geopy.
-* `domain/domain_service/spatial_service.py`: Chứa các tính toán phi trạng thái (Stateless Utility Service) chuyên xử lý giao cắt không gian, lọc các tuyến/bến qua Zone, và đo đếm chỉ số vòng vèo (Circuity Index).
-* Phân vùng `domain/domain_service/routing_service/`: Tổ hợp Module tính toán Lộ trình chuyên sâu:
-  * `core_engine.py`: Các lõi tìm đường (0-transfer, 1-transfer) dựa trên tập hợp và Hash Map $O(1)$.
-  * `filter_strategy.py`: Abstract Layer và các Concrete Class để bóc tách lộ trình (Unroll, Filter).
-  * `routing_service.py`: Lớp Facade tổng quan bọc ngoài toàn bộ logic Routing.
+## Cài đặt (Installation)
+1. Đảm bảo rằng bạn đã cài đặt phiên bản Python 3.8 trở lên trên máy.
+2. Clone repository chứa source code về thiết bị.
+3. Thiết lập môi trường ảo và cài đặt các thư viện phụ thuộc:
+   ```bash
+   pip install -r requirements.txt
+   ```
+   *Lưu ý: Hai thư viện cốt lõi mạnh mẽ được sử dụng phục vụ phân tích trắc địa (geospatial) ở đây bao gồm `shapely` và `geopy`.*
 
-## 2. Diễn giải chi tiết các Phân mảng 
+## Hướng dẫn sử dụng (Usage)
+Chạy tệp thực thi chính `main.py` ở lớp application context để kích hoạt trọn vẹn Use Case tải và đánh giá mạng:
+```bash
+python src/main.py
+```
+*(Mặc định, dữ liệu đầu vào đang trỏ tới tệp `schedule.xml` và `plans...xml` bên trong thư mục mock `cottbus` ở root directory của dự án)*
 
-### 2.1. File `domain_dataclass.py` (Cấu trúc Vật lý Nhẹ)
-Mô-đun định nghĩa các cấu trúc dữ liệu cơ sở không mang nghiệp vụ tìm đường.
-* **`Point`:** Biểu diễn điểm tọa độ (Kinh độ/Vĩ độ). Đã tích hợp tính toán khoảng cách thực địa qua thư viện `geopy` (Hàm đại hình học cầu - Geodesic - cực kỳ chính xác) thay cho định lý Pytago tạo sai số.
-* **`Leg` & `Itinerary`:** Đại diện cho một "chặng" di chuyển một lần và "hành trình" hoàn chỉnh.
-* **`AggregatedLeg` & `AggregatedItinerary`:** Mô hình nén giữ thông tin của **Tập hợp bến** (Possible Board/Alight Stops) chống lại sự bùng nổ dữ liệu (Hyperpath) do tính chất tổ hợp của các Trạm xe buýt.
+Toàn bộ các thông số đo lường KPI theo nhóm OD, Logs đường đi sẽ được trả ra tại tệp cấu trúc JSON `output_kpis.json` nằm tại gốc dự án.
 
-### 2.2. File `domain_class.py` (Thực Thể Miền Thông Minh)
-Mô-đun định nghĩa các đối tượng thông minh có kèm dữ liệu Hình học Không gian Vector (GeoSpatial Vector).
-* **`Zone`:** O/D Area. Đã cập nhật áp dụng lõi C++ của Shapely (Phương thức `.contains()`) để check tọa độ cực nhanh thay vì thuật toán Ray Casting thủ công.
-* **`Route`:** Lưu giữ hình dáng thật (Shape => LineString). 
-  * **Đo khoảng cách trắc địa:** Đã hoàn thiện phương thức cắt xén (Substring) LineString dọc theo đường xe buýt bằng Shapely và tính toán khoảng cách chính xác bề mặt cong chiều dài thực (Geopy). Dùng cho việt xuất "Chỉ số Vòng vèo" (Circuity Index).
-* **`ODPair`:** Ma trận nhu cầu đi lại từ `origin_area` tới `destination_area`.
-
-### 2.3. Phân vùng `spatial_service.py`
-Xử lý toàn cục không lệ thuộc vào quy trình Core Routing:
-* Gom các Logic giao cắt tập hợp (Intersect) cho Shapely LineString và Shapely Polygon.
-* Tính tổng quan Mức độ vòng vèo `find_cricuity_index_of_a_itinerary` thông qua đo đạc trực quan từ Hình chiếu (Projected Index) của các bến xe trên trục đường dích dắc của Tuyến Buýt.
-
-### 2.4. Phân vùng `routing_service/` (Trái Tim Hệ Thống)
-**`core_engine.py` (Lõi Lọc Tập hợp cực nhanh $O(1)$)**
-Sử dụng kiến trúc OOP Base `AbstractRoutingEngine`, thừa kế độc lập các nhánh thuật toán:
-* Nhánh `DirectConnectionRoutingEngine`: Xử lý đi xe trực tiếp.
-* Nhánh `OneTransferRoutingEngine`: Xử lý sang xe 1 lần.
-* **Đột phá Hiệu năng:** 
-  * Tạo Dictionaries Lookup trực tiếp tại các vòng lặp `.get(id, -1)` thay cho hàm `.index()` chậm chạp $O(N)$.  
-  * Tùy biến Local Hash Map khi Engine gọi hàm, giữ được sự thuần khiết cho Mô hình Dữ liệu (Không thay đổi Class gốc). Thời gian tính toán được chập xuống cận tuyến tính thay vì $O(N^4)$ như phiên bản cũ.
-
-**`filter_strategy.py` (Kiến trúc Strategy Tách Biệt)**
-* Thực thi `ItineraryFilterStrategy` để tạo ra Bộ lọc Tùy chỉnh (Dependency Injection).
-* Trạm trung chuyển và Trạm đón/trả được tìm siêu nhanh thông qua `OptimalWalkingDistanceFilter` & `OneTransferOptimalFilter`. Đã tích hợp Block bắt Exception (Khi Origin Zone trùng Destination Zone).
-
-**`routing_service.py` (Controller/Facade)**
-Bộ vi xử lý bề mặt với đúng 5 dòng Code. Yêu cầu song song hai Engine (0-transfer, 1-transfer) chạy và gộp mảng list trả lại Front-End trong nháy mắt.
-
-## 3. Đánh giá Khách quan Kế quả và Cải tiến còn lại
-
-### 3.1. Các mục tiêu Đã Chinh Phục Siêu Tốc
-1. [x] **Giải bải toán Sai số Không gian:** Loại bỏ Pytago, áp dụng hoàn toàn Geodesic dựa theo thư viện hạng nặng Shapely và Geopy.
-2. [x] **Giải quyết Nút thắt Cổ chai (Bottlenecks):** Dẹp vòng lặp `.index()`. Refactor các truy vấn chỉ bằng Key Hash Map Dictionary $O(1)$. 
-3. [x] **Thiết kế lại theo Clean Architecture OOP:** Chia Abstract Core Engine, Injectable Filter Strategy. Phân rã Component riêng có quy củ. Thiết lập ngoại lệ trùng OD Zone chuẩn chỉnh.
-
-### 3.2. Yếu điểm tiềm tàng (Bottlenecks) & Kế hoạch Tương lai
-1. **Bài toán Hiệu suất Không gian Số lượng cực lớn:**
-   Dù đã dùng Shapely, nhưng bản chất vẫn là duyệt tuần tự các `Route` qua `Zone`. Nếu chạy cho Mega Cities với *Hàng vạn Route*, tương lai cần tính tới Indexing Không gian B-Tree / R-Tree như `sindex` của `Geopandas` để dò vùng quét Radar thay vì For-Loop thuần.
-2. **Quản trị Bộ nhớ RAM (OOM Crash):**
-   Vẫn cần đánh dấu Memory Profiling. Nếu Server tràn RAM, sẽ cân nhắc thêm `__slots__ = [...]` cho các Class cơ bản để khóa chặt dung lượng Heap của Từng Object `Point`, `Stop`, `Leg`.
-3. **Mở rộng tuyến độ sâu N-Transfer (> 1 Transfer):**
-   *(Ghi chú: Cải tiến số 3 này tạm thời bị loại bỏ vào lúc này theo quyết định của tác giả vì hiện tại mức 1-transfer đã đáp ứng đủ Use Cases nghiệp vụ cốt lõi).* 
-   Tuy nhiên, nếu tái khởi động: Bắt buộc đập đi xây lại luồng Search bằng Đồ thị Trọng số (Nodes Network) sử dụng thư viện `networkx` và áp dụng Thuật toán `Dijkstra`/`A*`. Phương thức Intersection Set chập mảng như hiện tại sẽ sập nguồn hệ thống vì Bùng nổ Tổ hợp nếu cố nhét thêm 2-transfers.
+## Cấu trúc thư mục quy ước (Folder Structure)
+Hệ thống tuân thủ chặt chẽ mô hình **Clean Architecture**:
+- `domain/`: Lưu trữ Domain Models cốt lõi không phụ thuộc vào Framework bên ngoài (VD: Entities, Dataclass) và Domain Services (Chứa Engine Routing, Khối tính KPI).
+- `src/application/`: Chứa định nghĩa các Ports interface và Use Cases điểu phối logic luồng hoạt động ứng dụng chung (Services).
+- `src/infrastructure/`: Chứa các Component tương tác vật lý (như Repository đọc file XML, lưu JSON).
+- `cottbus/`: File giả lập/tĩnh từ luồng dữ liệu giao thông thật.
