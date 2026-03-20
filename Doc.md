@@ -15,44 +15,55 @@ graph TD
     classDef infra fill:#f9d0c4,stroke:#333,stroke-width:2px;
     classDef app fill:#fef0d9,stroke:#333,stroke-width:2px;
     classDef domain fill:#d4edda,stroke:#333,stroke-width:2px;
+    classDef main fill:#bbedff,stroke:#333,stroke-width:2px;
 
-    subgraph INFRA[1. Infrastructure Layer - Tầng Hạ Tầng]
-        XML[(Dữ liệu XML: <br> schedule.xml, plans.xml)]
-        Repo[CottbusXmlRepository <br> (Implements Repository Port)]
+    Main["main.py (Entrypoint)"]:::main
+    
+    subgraph APP[2. Application Layer - Tầng Ứng dụng]
+        UseCase["EvaluateNetworkUseCase"]
+        AppSvc["ProduceODResult & CalKPI<br>(Services)"]
+        Ports["EvaluationDataRepository<br>(Port)"]
     end
-
-    subgraph APP[2. Application Layer - Tầng Ứng Dụng]
-        UseCase[EvaluateNetworkUseCase <br> (Orchestrator)]
-        ODProd[ProduceODResult <br> (Routing Coordinator)]
-        Cal[CalKPI <br> (KPI Coordinator)]
-        Ports[Interfaces / Ports]
+    
+    subgraph INFRA[1. Infrastructure Layer - Tầng Hạ tầng]
+        Repo["CottbusXmlRepository"]
+        XML[("XML Files<br>(DB/Data)")]
     end
-
-    subgraph DOMAIN[3. Domain Layer - Tầng Nghiệp Vụ Lõi]
-        subgraph Entities [Thực thể & Cấu trúc Dữ liệu]
-            E_Route[Route, Stop, Zone, Point]
-            E_Itin[Leg, Itinerary, ODPair, ODRoutingResult]
+    
+    subgraph DOMAIN[3. Domain Layer - Tầng Nghiệp vụ lõi]
+        subgraph GroupDomainServices [Domain Services]
+            DomSvc["Routing Engine & KPI Calculators"]
         end
-        subgraph Services [Domain Services]
-            S_Route[Routing Engines: <br> Direct, OneTransfer]
-            S_KPI[KPI Calculators: <br> Transfer, Circuity, Spatial]
+        
+        subgraph GroupModels [Thực Thể & Dataclass]
+            Entities["Thực thể<br>(Route, Stop, Zone, ODPair)"]
+            Dataclasses["Dataclass<br>(Leg, Itinerary, Result)"]
+            
+            %% Liên kết ẩn ép 2 ô này đứng sát nhau
+            Entities ~~~ Dataclasses
         end
     end
 
-    %% Mối liên hệ
-    XML -->|Đọc file/Parse| Repo
-    Repo -.->|Phụ thuộc ngược| Ports
-    UseCase -->|Dependency Injection| Ports
-    UseCase -->|Sử dụng| ODProd
-    UseCase -->|Sử dụng| Cal
-    ODProd -->|Gọi hàm nghiệp vụ| S_Route
-    Cal -->|Gọi hàm nghiệp vụ| S_KPI
-    S_Route -->|Thao tác dữ liệu| Entities
-    S_KPI -->|Thao tác dữ liệu| Entities
+    %% Mối tương tác theo chuẩn Clean Architecture
+    Main -- "invokes (gọi)" --> UseCase
+    UseCase -- "starts / orchestrates" --> AppSvc
+    UseCase -. "depends on interface" .-> Ports
+    
+    AppSvc -- "call methods on<br>(xử lý logic)" --> DomSvc
+    
+    DomSvc -- "manipulate<br>(tương tác)" --> Entities
+    DomSvc -- "manipulate<br>(tương tác)" --> Dataclasses
+    
+    Repo -- "implements / provides" --> Ports
+    
+    %% Tăng độ dài mũi tên để có thêm không gian dọc, tránh dãn ngang
+    Repo -- "loads and saves<br>(map qua lại)" ---> Entities
+    Repo -- "loads and saves<br>(map qua lại)" ---> Dataclasses
+    Repo -- "reads from" --> XML
 
     class XML,Repo infra;
-    class UseCase,ODProd,Cal,Ports app;
-    class E_Route,E_Itin,S_Route,S_KPI domain;
+    class UseCase,AppSvc,Ports app;
+    class Entities,Dataclasses,DomSvc domain;
 ```
 
 ### 1.2. Phân Tích Cấu Trúc Lớp (Tư liệu báo cáo)
@@ -89,53 +100,57 @@ Nhờ triển khai DDD, các đối tượng mang ý nghĩa nghiệp vụ (Busin
 ```mermaid
 sequenceDiagram
     autonumber
-    actor CLI as Người dùng / Khởi chạy (Client)
-    participant UC as EvaluateNetworkUseCase <br> (Application)
-    participant Repo as CottbusXmlRepository <br> (Infrastructure)
-    participant Router as ProduceODResult <br> (App Service)
-    participant KPI as CalKPI <br> (App Service)
-    participant Disk as Hệ thống File <br> (Output)
+    
+    box rgb(240, 248, 255) Tầng Khởi Chạy
+        participant CLI as main.py
+    end
+    
+    box rgb(254, 240, 217) Tầng Ứng Dụng - Service Layer
+        participant UC as EvaluateNetworkUseCase
+        participant Router as ProduceODResult
+        participant KPI as CalKPI
+    end
+    
+    box rgb(249, 208, 196) Tầng Hạ Tầng - Adapters
+        participant Repo as CottbusXmlRepository
+    end
+    
+    box rgb(212, 237, 218) Tầng Nghiệp Vụ Lõi - Domain
+        participant Dom as Entities & Domain Services
+    end
 
-    CLI->>UC: Gọi .execute(output_json_path)
+    CLI->>UC: Gọi execute()
     activate UC
     
-    rect rgb(238, 245, 250)
-        Note right of UC: BƯỚC 1: LOAD DỮ LIỆU
-        UC->>Repo: load_network_and_demand()
-        activate Repo
-        Note right of Repo: Parse Schedule.xml (Tuyến)<br/>Parse Plans.xml (Người dân)<br/>Pre-filter loại bỏ các luồng không xe tới
-        Repo-->>UC: Trả về: [stops, routes, zones, od_pairs]
-        deactivate Repo
-    end
+    Note right of UC: BƯỚC 1: LOAD DỮ LIỆU
+    UC->>Repo: load_network_and_demand()
+    activate Repo
+    Repo->>Dom: Tạo Entities (Stop, Route, Zone, ODPair)
+    Repo-->>UC: Trả về Danh sách Entities
+    deactivate Repo
     
-    rect rgb(250, 240, 230)
-        Note left of Router: BƯỚC 2: ROUTING (TÌM KẾT NỐI)
-        UC->>Router: produce_od_result(tuyến, trạm, od_pairs)
-        activate Router
-        Router->>Router: Chạy DirectConnectionRoutingEngine
-        Router->>Router: Chạy OneTransferRoutingEngine
-        Note right of Router: Mapping OD vào các Trạm dừng khả dụng.<br/>Áp dụng WalkDistance Filter.
-        Router-->>UC: Trả về List [ODRoutingResult] <br> (Chứa các Leg/Itinerary cụ thể)
-        deactivate Router
-    end
+    Note over UC,Router: BƯỚC 2: ROUTING (TÌM KẾT NỐI)
+    UC->>Router: produce_od_result(tuyến, trạm, od_pairs)
+    activate Router
+    Router->>Dom: Gọi DirectConnectionRoutingEngine
+    Router->>Dom: Gọi OneTransferRoutingEngine
+    Dom-->>Router: Trả về kết quả đường đi khả thi
+    Router->>Dom: Tạo ODRoutingResult (Entity)
+    Router-->>UC: Trả về List[ODRoutingResult]
+    deactivate Router
     
-    rect rgb(230, 250, 230)
-        Note right of KPI: BƯỚC 3: TÍNH TOÁN KPI
-        UC->>KPI: cal_kpi(routing_results, list_kpi_calculators)
-        activate KPI
-        KPI->>KPI: Abstract Call: Transfer Rate Formula
-        KPI->>KPI: Abstract Call: Circuity Index (Chỉ số vòng vèo)
-        KPI->>KPI: Abstract Call: Spatial Coverage (Giao đồ thị Shapely 500m)
-        KPI-->>UC: Trả về Dict/JSON [kpi_report] cực chi tiết
-        deactivate KPI
-    end
+    Note over UC,KPI: BƯỚC 3: TÍNH TOÁN KPI
+    UC->>KPI: cal_kpi(routing_results)
+    activate KPI
+    KPI->>Dom: Chạy Transfer_rate_calculate()
+    KPI->>Dom: Chạy Circuity_index_calculate()
+    KPI->>Dom: Chạy KPIASpatialCoverageService()
+    Dom-->>KPI: Trả về điểm số KPI thô
+    KPI-->>UC: Trả về Dict/JSON [kpi_report] tổng hợp
+    deactivate KPI
     
-    rect rgb(255, 245, 255)
-        Note right of UC: BƯỚC 4: XUẤTKẾT QUẢ (EXPORT)
-        UC->>Disk: _export_json()
-        Disk-->>UC: Tạo file 'output_kpis.json'
-    end
-    UC-->>CLI: Thông báo Hoàn Tất
+    Note right of UC: BƯỚC 4: Xuất Kết Quả
+    UC-->>CLI: Cấp phát file 'output_kpis.json'
     deactivate UC
 ```
 
